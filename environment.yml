@@ -1,0 +1,10 @@
+name: bme590hrm
+dependencies:
+  - python=3.6
+  - numpy
+  - ipython
+  - pytest
+  - pytest-cov
+  - pytest-pep8
+
+  
