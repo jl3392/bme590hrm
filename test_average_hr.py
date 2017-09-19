@@ -8,22 +8,24 @@ from hrm1 import avg_hr
 from avg_hr import new_hr_set
 from avg_hr import avg_hr
 
-def test_new_hr_set_exists():
+
+def test_new_hr_set_equal():
     # This case checks for when user input exists in set for 5 minutes (300 sec)
-    assert new_hr_set(300, [80,200,250,270,300,301,400]) == [80,200,250,270,300]
+    new_hr_set('5')
+    assert groupnum == 60
 
-def test_new_hr_set_DNEinside():
-    # This case checks for when user input does not exist, and is within the limits
-    assert new_hr_set(300, [80,200,250,280,320,800,9000]) == [80,200,250,280,320]
 
-def test_new_hr_set_DNEoutside():
-    # This case checks for when user input does not exist, and is outside of the limit
-    assert new_hr_set(300, [80,200,250,280]) == [80,200,250,280]
+def test_new_hr_set_between():
+    # This case checks for when user input is not divisible by predetermined window
+    new_hr_set('5.1')
+    assert groupnum == 61
 
 # TO DO - Raise exception for when user input is a NaN or a complex number
 
+
 def test_avg_hr():
-    assert avg_hr(5, [80,200,250,280,320]) == #Will calculate this once inst_hr exists
+    assert avg_hr([80,79,85,90,77],5) == 82
+
 
 
 
