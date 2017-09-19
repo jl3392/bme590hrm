@@ -29,8 +29,9 @@ def new_hr_set(mins):
     realbunches = rawbunches[:groupnum]
     return realbunches, groupnum
 
-def avg_hr(bunches,groupnum):
-    avghr = sum(bunches)/groupnum
+
+def avg_hr(realbunches, groupnum):
+    avghr = sum(realbunches)/groupnum
     return avghr()
     print('The average heart rate for {} minute(s) was {} beats per minute'.format(mins, avghr))
 
