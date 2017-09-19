@@ -24,7 +24,11 @@ def test_new_hr_set_between():
 
 
 def test_avg_hr():
+<<<<<<< HEAD
     assert avg_hr([80, 79, 85, 90, 77], 5) == 82.2
+=======
+    assert avg_hr([80,79,85,90,77],5) == 82
+>>>>>>> 7d7b8cccf8e981168cef7d796688fa1231140d93
 
 
 
