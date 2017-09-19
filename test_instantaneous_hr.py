@@ -1,5 +1,4 @@
 import find_max_peaks
-import inst_hr
 import numpy as np
 
 sample_voltage_array1 = np.array([0.411, 0.388, 0.3345, 0.386, 0.3475]) #in mv
@@ -30,7 +29,9 @@ def test_inst_hr():
     """
     Unit test for function that calculates instantaneous HR
     :return: nothing, pass if assertion is true
+    
     """
+    import inst_hr 
     (num_of_peaks1,num_of_peaks2,num_of_peaks3) = test_find_max_peaks()
 
     assert inst_hr(num_of_peaks1) == 24 #in bpm
