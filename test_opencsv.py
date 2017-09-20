@@ -1,18 +1,18 @@
-from hmr1 import opencsv
+import opencsv
+import numpy
+
+
+filename = "Data/ecg_data_short.csv"
 
 
 def test_opencsv():
-    f = opencsv("file_name.csv")
-    if isinstance(f, dict) is True:
+
+    f = opencsv.opencsv(filename)
+    if isinstance(f, numpy.ndarray) is True:
         print("The csv file is open and imported as dictionary")
 
 
-def check_header():
-    f = opencsv("file_name.csv")
-    assert f.head(1) == ['time(s)', 'voltage(mv)']
-
-
 def check_empty():
-    f = opencsv("file_name.csv")
+    f = opencsv.opencsv(filename)
     assert len(f) != 0
 
