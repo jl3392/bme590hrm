@@ -10,14 +10,14 @@
 
 def test_new_hr_set_equal():
     # This case checks for when user input exists in set for 5 minutes (300 sec)
-    new_hr_set('5')
-    assert groupnum == 60
+    testgroup = new_hr_set('5')
+    assert testgroup[1] == 60
 
 
 def test_new_hr_set_between():
     # This case checks for when user input is not divisible by predetermined window
-    new_hr_set('5.1')
-    assert groupnum == 61
+    testgroup2 = new_hr_set('5.1')
+    assert testgroup22[2] == 61
 
 # TO DO - Raise exception for when user input is a NaN or a complex number
 
