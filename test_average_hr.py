@@ -1,12 +1,11 @@
 # Importing dependencies
 
 # Importing necessary fxns
-from hrm1 import find_max_peaks
-from hrm1 import inst_hr
-from hrm1 import avg_hr
+# from hrm1 import find_max_peaks
+# from hrm1 import inst_hr
+# from hrm1 import avg_hr
 
-from avg_hr import new_hr_set
-from avg_hr import avg_hr
+
 
 
 def test_new_hr_set_equal():

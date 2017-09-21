@@ -1,6 +1,5 @@
 # Need to import Niranjana's Module for Inst. HR
-
-from inst_hr import inst_hr
+# from inst_hr import inst_hr
 
 # Initialization
 min2sec = 60
