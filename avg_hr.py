@@ -3,12 +3,13 @@
 
 # Initialization
 min2sec = 60
-inst_time_period = 5  # In minutes
+inst_time_period = 5  # In seconds
 
 
 def new_hr_set(mins):
     # Taking input and converting it to seconds
-    mins = float(input('Please specify a time (in min) for averaging.'))
+    # mins = float(input('Please specify a time (in min) for averaging.'))
+    mins = 0.5
 
     # if isinstance(mins,complex) = True:
     #   print('Please use real numbers.')
@@ -24,7 +25,7 @@ def new_hr_set(mins):
         groupnum = round(usersec/inst_time_period) + 1
 
     # Take Niranjana's grouping output and truncating to fit user input
-    rawbunches = inst_hr()
+    rawbunches = [80, 79, 85, 90, 77, 73] # test data, should be inst_hr()
     realbunches = rawbunches[:groupnum]
     return realbunches, groupnum
 
