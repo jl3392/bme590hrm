@@ -25,7 +25,10 @@ def test_inst_hr():
     from inst_hr import inst_hr
     peaks = test_find_max_peaks()
 
-    assert inst_hr(peaks,update_time =3) == [40,40,40] #in bpm
+    HR = inst_hr(peaks,update_time =3)  #in bpm
+    checking_HR = np.array(HR == [40,40,40])
+
+    assert checking_HR.all()
 
 
 
