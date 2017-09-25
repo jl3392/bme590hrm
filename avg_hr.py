@@ -16,7 +16,7 @@ def new_hr_set(mins):
         mins = input('Please specify a time (in min) for averaging.')
 
     if isinstance(mins, complex) is True:
-        print('Please use real numbers.')
+        raise ValueError('Please use real numbers.')
 
     # Conversion of minutes to seconds
     usersec = mins * min2sec
