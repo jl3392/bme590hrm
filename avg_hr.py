@@ -10,13 +10,14 @@ inst_time_period = 5  # In seconds
 
 def new_hr_set(mins):
     # Taking input and converting it to seconds
-    if isinstance(mins, float) is True:
+    if isinstance(mins, float) is True or isinstance(mins, int) is True:
         mins = mins
+    elif isinstance(mins, complex) is True:
+        raise ValueError('Please use real numbers.')
     else:
         mins = float(input('Please specify a time (in min) for averaging.'))
 
-    if isinstance(mins, complex) is True:
-        raise ValueError('Please use real numbers.')
+
 
     # Conversion of minutes to seconds
     usersec = mins * min2sec
