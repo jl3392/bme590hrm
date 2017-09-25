@@ -17,7 +17,7 @@ def test_opencsv():
 def check_empty():
     """test the file is not empty
     """
-    
+
     f = opencsv.opencsv(filename)
     assert len(f) != 0
 
