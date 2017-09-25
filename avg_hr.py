@@ -13,7 +13,7 @@ def new_hr_set(mins):
     if isinstance(mins, float) is True:
         mins = mins
     else:
-        mins = input('Please specify a time (in min) for averaging.')
+        mins = float(input('Please specify a time (in min) for averaging.'))
 
     if isinstance(mins, complex) is True:
         raise ValueError('Please use real numbers.')
@@ -37,7 +37,7 @@ def new_hr_set(mins):
 def avg_hr(realbunches, groupnum):
     avghr = math.floor(sum(realbunches)/groupnum)
     return avghr
-    # print('The average heart rate for {} minute(s) was {} beats per minute'.format(mins, avghr))
+    print('The average heart rate for {} minute(s) was {} beats per minute'.format(mins, avghr))
 
 
 
