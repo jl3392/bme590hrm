@@ -8,7 +8,7 @@ min2sec = 60
 inst_time_period = 5  # In seconds
 
 
-def new_hr_set(mins):
+def new_hr_set(mins, rawbunches):
     # Taking input and converting it to seconds
     if isinstance(mins, float) is True or isinstance(mins, int) is True:
         mins = mins
@@ -16,8 +16,6 @@ def new_hr_set(mins):
         raise ValueError('Please use real numbers.')
     else:
         mins = float(input('Please specify a time (in min) for averaging.'))
-
-
 
     # Conversion of minutes to seconds
     usersec = mins * min2sec
@@ -30,8 +28,11 @@ def new_hr_set(mins):
         groupnum = int(math.floor(usersec/inst_time_period) + 1)
 
     # Take Niranjana's grouping output and truncating to fit user input
-    rawbunches = [80, 79, 85, 90, 77, 73]  # test data, should be inst_hr()
-    realbunches = rawbunches[0:groupnum]
+    # rawbunches = [80, 79, 85, 90, 77, 73]  # test data, should be inst_hr()
+    if len(rawbunches) <= groupnum:  # Case for if user specified time is > number of indices of actual data
+        realbunches = rawbunches
+    else:
+        realbunches = rawbunches[0:groupnum]
     return realbunches, groupnum
 
 
