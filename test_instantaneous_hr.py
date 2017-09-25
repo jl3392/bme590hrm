@@ -22,7 +22,7 @@ def test_inst_hr():
     :return: nothing, pass if assertion is true
     
     """
-    import inst_hr 
+    from inst_hr import inst_hr
     peaks = test_find_max_peaks()
 
     assert inst_hr(peaks,update_time =3) == [40,40,40] #in bpm
