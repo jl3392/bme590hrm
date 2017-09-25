@@ -1,0 +1,6 @@
+#File types we're ignoring 
+
+*.xml
+*.pyc
+*.iml
+.cache/
