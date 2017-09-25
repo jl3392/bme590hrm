@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="baf3233f-a93c-497e-b0ca-d6bd0a512dc3" name="Default" comment="" />
+<
+    <list default="true" id="f843ca95-a168-40d1-8a06-77d1356a0eec" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bradtach.py" afterPath="$PROJECT_DIR$/bradtach.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test_bradtach.py" afterPath="$PROJECT_DIR$/test_bradtach.py" />
+    </list>
+
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,6 +19,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+
+      <file leaf-file-name="test_bradtach.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test_bradtach.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bradtach.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bradtach.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="18" lean-forward="true" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+              <folding />
+
       <file leaf-file-name="opencsv.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/opencsv.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -22,6 +45,7 @@
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
+
             </state>
           </provider>
         </entry>
@@ -44,11 +68,17 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+
+        <option value="$PROJECT_DIR$/test_average_hr.py" />
+        <option value="$PROJECT_DIR$/bradtach.py" />
+        <option value="$PROJECT_DIR$/test_bradtach.py" />
+
         <option value="$PROJECT_DIR$/practice_instant_hr.py" />
         <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$USER_HOME$/Documents/duke /fall 2017/Medical Device Software/opencsv.py" />
         <option value="$PROJECT_DIR$/test_opencsv.py" />
         <option value="$PROJECT_DIR$/opencsv.py" />
+
       </list>
     </option>
   </component>
@@ -59,10 +89,17 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+
+    <option name="x" value="499" />
+    <option name="y" value="77" />
+    <option name="width" value="924" />
+    <option name="height" value="585" />
+
     <option name="x" value="61" />
     <option name="y" value="23" />
     <option name="width" value="943" />
     <option name="height" value="462" />
+
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -79,6 +116,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+
+      <pane id="Scope" />
+
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -95,7 +135,10 @@
           <select />
         </subPane>
       </pane>
+
+
       <pane id="Scope" />
+
       <pane id="Scratches" />
     </panes>
   </component>
@@ -153,7 +196,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+
+    <frame x="499" y="77" width="924" height="585" extended-state="0" />
+4
     <frame x="61" y="23" width="943" height="462" extended-state="0" />
+
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33404028" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -162,7 +209,11 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3310811" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -190,6 +241,20 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+
+    <entry file="file://$PROJECT_DIR$/test_bradtach.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="37" lean-forward="true" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bradtach.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+
     <entry file="file://$PROJECT_DIR$/opencsv.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -204,10 +269,28 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+
           <folding />
         </state>
       </provider>
     </entry>
+
+    <entry file="file://$PROJECT_DIR$/test_average_hr.py" />
+    <entry file="file://$PROJECT_DIR$/test_bradtach.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_average_hr.py" />
+    <entry file="file://$PROJECT_DIR$/test_average_hr.py" />
+    <entry file="file://$PROJECT_DIR$/bradtach.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="18" lean-forward="true" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+
     <entry file="file://$PROJECT_DIR$/practice_instant_hr.py" />
     <entry file="file://$PROJECT_DIR$/.travis.yml" />
     <entry file="file://$PROJECT_DIR$/test_opencsv.py" />
@@ -228,10 +311,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="28">
           <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+
           <folding />
         </state>
       </provider>
     </entry>
+
+    <entry file="file://$PROJECT_DIR$/test_bradtach.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+
     <entry file="file://$PROJECT_DIR$/opencsv.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -239,6 +330,7 @@
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+
         </state>
       </provider>
     </entry>
