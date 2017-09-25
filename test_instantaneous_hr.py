@@ -1,6 +1,6 @@
-import find_max_peaks
+from find_max_peaks import find_max_peaks
 import numpy
-import opencsv
+from opencsv import opencsv
 
 f = opencsv(r'C:\Users\Niranjana\Desktop\bme590hrm\Data\ecg_data_short.csv')
 sample_time_array = f[0]
