@@ -2,7 +2,7 @@ from find_max_peaks import find_max_peaks
 import numpy as np
 from opencsv import opencsv
 
-f = opencsv('Data\ecg_data_short.csv')
+f = opencsv('ecg_data_short.csv')
 sample_time_array = f[0]
 sample_voltage_array = f[1]
 
