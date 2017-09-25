@@ -1,29 +1,20 @@
 import find_max_peaks
 import numpy
+import opencsv
 
-sample_voltage_array1 = np.array([0.411, 0.388, 0.3345, 0.386, 0.3475]) #in mv
-sample_time_array1 = np.array([0,1,2,3,4])#in seconds
-
-sample_voltage_array2 = np.array([0.411,0.388, 0.3345, 0.386, 0.3475, 0.3470, 0.3600,0.3575,0.3770, 0.3575])
-sample_time_array2 = np.array([0,1,2,3,4,5,6,7,8,9])
-
-sample_voltage_array3 = np.array([0.411, 0.388, 0.3345, 0.386, 0.3475,0.3470,0.3440])
-sample_time_array3 = np.array([0,1,2,3,4,5,6])
+f = opencsv(r'C:\Users\Niranjana\Desktop\bme590hrm\Data\ecg_data_short.csv')
+sample_time_array = f[0]
+sample_voltage_array = f[1]
 
 
 def test_find_max_peaks():
     """
     Unit test for function that finds and counts R peaks of all QRS modules within specified inst_time_period_secs
     """
-    index_of_peaks1 = find_max_peaks(sample_voltage_array1,update_time = 5)
-    index_of_peaks2 = find_max_peaks(sample_voltage_array2, update_time = 5)
-    index_of_peaks3 = find_max_peaks(sample_voltage_array3, update_time = 5)
-
-    assert index_of_peaks1 == [1,3]
-    assert index_of_peaks2 == [[1,3],[6,8]]
-    assert index_of_peaks3 == [1,3]
-    
-    return (len(index_of_peaks1),len(index_of_peaks2),len(index_of_peaks3))
+    peaks = find_max_peaks(voltage_array=sample_voltage_array, time_array=sample_time_array, min_dist=150,
+                             update_time=3)
+    assert peaks == [[[[8.6739999999999995, 0.54249999999999998], [9.3260000000000005, 0.59950000000000003]], [[9.9879999999999995, 0.63800000000000001], [10.654, 0.64949999999999997]], [[11.318, 0.66849999999999998], [11.952, 0.64749999999999996]]]]
+    return peaks
 
 def test_inst_hr():
     """
@@ -32,11 +23,9 @@ def test_inst_hr():
     
     """
     import inst_hr 
-    (num_of_peaks1,num_of_peaks2,num_of_peaks3) = test_find_max_peaks()
+    peaks = test_find_max_peaks()
 
-    assert inst_hr(num_of_peaks1) == 24 #in bpm
-    assert inst_hr(num_of_peaks2) == [24,24] 
-    assert inst_hr(num_of_peaks3) == 24
+    assert inst_hr(peaks,update_time =3) == [40,40,40] #in bpm
 
 
 
