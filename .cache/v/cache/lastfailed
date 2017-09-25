@@ -1,5 +1,0 @@
-{
-  "test_average_hr.py::test_avg_hr": true,
-  "test_average_hr.py::test_new_hr_set_between": true,
-  "test_average_hr.py::test_new_hr_set_equal": true
-}
