@@ -1,3 +1,16 @@
+"""
+:mod:`opencsv` -- open the csv file and covert the data into numpy array
+
+ ..module:: opencsv
+   :synopsis: open the ECG.csv file and convert the data into numpy array
+   :license: Apache v2.0, see LICENSE for details
+   :copyright: Copyright 2017 Jing-Rui Li, Inje Lee, Niranjana Shashikumar
+
+
+.. moduleauthor:: Jing-Rui Li <jl714@duke.edu>
+
+"""
+
 import csv
 import numpy as np
 
