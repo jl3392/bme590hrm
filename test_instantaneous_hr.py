@@ -1,5 +1,5 @@
 from find_max_peaks import find_max_peaks
-import numpy
+import numpy as np
 from opencsv import opencsv
 
 f = opencsv(r'C:\Users\Niranjana\Desktop\bme590hrm\Data\ecg_data_short.csv')
