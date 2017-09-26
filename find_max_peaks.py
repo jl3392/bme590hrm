@@ -21,10 +21,12 @@ def find_max_peaks(voltage_array, time_array, update_time, min_dist=150):
 
     if isinstance(update_time, float):
         update_time = int(update_time)
+    total_time = time_array[-1] - time_array[1]
+    if total_time / update_time < 1:
+        raise ValueError("Update time is longer than signal length")
     divided_voltage_array = np.array_split(voltage_array, update_time)
     divided_time_array = np.array_split(time_array, update_time)
     length = len(voltage_array)
-    chunks = len(divided_voltage_array)
     if length % update_time != 0:
         np.delete(divided_voltage_array, -1)
     for i in range(len(divided_voltage_array)):
@@ -72,7 +74,7 @@ def find_max_peaks(voltage_array, time_array, update_time, min_dist=150):
                 max_peaks.pop(0)
             del dump
         except IndexError:
-            # no peaks were found, should the function return empty lists?
+            # no peaks were found
             print("No peaks were found")
 
     return total_peaks
