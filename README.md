@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jl3392/bme590hrm.png?branch=master)](https://travis-ci.org/jl3392/bme590hrm)
+
 Heart Rate Monitor
 ======================
 This project works on designing the software of a heart rate monitor, aiming to estimate three main parts of the heart ECG signal:
