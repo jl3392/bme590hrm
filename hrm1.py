@@ -14,34 +14,41 @@ tell whether or not the user has tachycardia, bradycardia, or a normal HR over t
 period of time.
 """
 
-# Importing csv data
-data = opencsv(r'/Users/injelee/bme590hrm/ecg_data_short.csv')  # Please update ECG file location
-time = data[0]
-voltage = data[1]
 
-# Instantaneous heart rate
-maxpeaks = find_max_peaks(voltage, time, update_time=5)  # Instantaneous HR updates every 5 seconds [configurable]
-instantaneoushr = inst_hr(maxpeaks, update_time=5)
-
-# Average heart rate
-mins = float(input('Please specify a time (in min) for averaging.'))
-newHRset = new_hr_set(mins, instantaneoushr, update_time=5)
-avgHR = avg_hr(newHRset[0], newHRset[1])
-
-# Brady/Tachycardia
-condition = bradtach(avgHR, mins)
-message = condition[1]
-
-# Output Information in .txt File
-
-HRinfo = open('HR_Information.txt', 'w')
-HRinfo.write("Estimated Instantaneous HR is {} beats per minute.".format(instantaneoushr))
-HRinfo.write("/nEstimated Average HR is {} beats per minute in minutes/n".format(avgHR, mins))
-HRinfo.write("/n{}/n".format(message))
+def hrmonitor(filepath):
+    """
+    :param filepath: ECG data location
+    :return: .txt file with instantaneous heart rate, average heart rate over user specified time and brady/tachycardia
+    occurrence
+    """
+    # Importing csv data
+    data = opencsv(filepath)  # Update path or add file to root folder
+    time = data[0]
+    voltage = data[1]
+    
+    # Instantaneous heart rate
+    maxpeaks = find_max_peaks(voltage, time, update_time=5)  # Instantaneous HR updates every 5 seconds [configurable]
+    instantaneoushr = inst_hr(maxpeaks, update_time=5)
+    
+    # Average heart rate
+    mins = float(input('Please specify a time (in min) for averaging.'))
+    newHRset = new_hr_set(mins, instantaneoushr, update_time=5)
+    avgHR = avg_hr(newHRset[0], newHRset[1])
+    
+    # Brady/Tachycardia
+    condition = bradtach(avgHR, mins)
+    message = condition[1]
+    
+    # Output Information in .txt File
+    
+    HRinfo = open('HR_Information.txt', 'w')
+    HRinfo.write("Estimated Instantaneous HR is {} beats per minute.".format(instantaneoushr))
+    HRinfo.write("/nEstimated Average HR is {} beats per minute in minutes/n".format(avgHR, mins))
+    HRinfo.write("/n{}/n".format(message))
 
 if __name__ == "__main__":
     # Importing csv data
-    exampledata = opencsv(r'/Users/injelee/bme590hrm/ecg_data_short.csv')  # Please update ECG file location
+    exampledata = opencsv('Data/ecg_data.csv')
     extime = exampledata[0]
     exvoltage = exampledata[1]
 
@@ -58,7 +65,7 @@ if __name__ == "__main__":
     excondition = bradtach(exavgHR, exmins)
     exmessage = excondition[1]
 
-    print("Estimated Instantaneous HR is {} beats per minute.".format(instantaneoushr))
-    print("Estimated Average HR is {} beats per minute in minutes".format(avgHR, mins))
+    print("Estimated Instantaneous HR is {} beats per minute.".format(exinstantaneoushr))
+    print("Estimated Average HR is {} beats per minute in minutes".format(exavgHR, exmins))
     print("{}".format(exmessage))
 
