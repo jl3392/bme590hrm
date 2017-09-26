@@ -1,5 +1,6 @@
-avg_hr
-inst_hr
-opencsv
-find_max_peaks
-bradtach
+python=3.6
+numpy
+ipython
+pytest
+pytest-cov
+pytest-pep8
