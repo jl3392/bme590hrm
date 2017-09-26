@@ -47,7 +47,7 @@ def new_hr_set(mins, rawbunches, update_time):
     usersec = mins * min2sec
 
     # Must have number of groups be whole
-    if usersec % inst_time_period == 0:
+    if usersec % update_time == 0:
         groupnum = int(usersec/update_time)
     # Taking an additional groups if user input is between groups
     else:
