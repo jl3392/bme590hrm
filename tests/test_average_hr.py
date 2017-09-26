@@ -15,7 +15,8 @@ def test_new_hr_set_equal():
     """
     mins = 0.5
     rawbunches = [80, 79, 85, 90, 77, 73]
-    testgroup = new_hr_set(mins, rawbunches)
+    update_time = 5
+    testgroup = new_hr_set(mins, rawbunches, update_time)
     assert testgroup[1] == 6
 
 
@@ -25,7 +26,8 @@ def test_new_hr_set_between():
     """
     min2 = 0.67
     rawbunches = [80, 79, 85, 90, 77, 73]
-    testgroup2 = new_hr_set(min2, rawbunches)
+    update_time = 5
+    testgroup2 = new_hr_set(min2, rawbunches, update_time)
     assert testgroup2[1] == 9
 
 
@@ -35,7 +37,8 @@ def test_longmin():
     """
     minlong = 132
     rawbunches = [80, 79, 85, 90, 77, 73]
-    testgrouplong = new_hr_set(minlong, rawbunches)
+    update_time = 5
+    testgrouplong = new_hr_set(minlong, rawbunches, update_time)
     assert testgrouplong[1] == 1584
 
 
@@ -45,7 +48,8 @@ class TestComplex(unittest.TestCase):
         Testing for 'raise' error when input is set to a complex number
         """
         rawbunches = [80, 79, 85, 90, 77, 73]
-        self.assertRaises(ValueError, new_hr_set, 2j+9, rawbunches)
+        update_time = 5
+        self.assertRaises(ValueError, new_hr_set, 2j+9, rawbunches, update_time)
 
 
 def test_groupnum_greaterthan_data():
@@ -54,7 +58,8 @@ def test_groupnum_greaterthan_data():
     """
     mins = 5  # User input 5 minutes
     rawbunches = [65, 70, 68, 77, 74, 68, 64, 65, 64, 78]  # Data set only has bunches for 50 sec
-    testinputgreater = new_hr_set(mins, rawbunches)
+    update_time = 5
+    testinputgreater = new_hr_set(mins, rawbunches, update_time)
     assert testinputgreater[0] == rawbunches
 
 
@@ -64,7 +69,8 @@ def test_groupnum_equaltodata():
     """
     mins = 0.5
     rawbunches = [60, 70, 65, 68, 71, 68]
-    testinputequal = new_hr_set(mins, rawbunches)
+    update_time = 5
+    testinputequal = new_hr_set(mins, rawbunches, update_time)
     assert testinputequal[0] == rawbunches
 
 
@@ -74,7 +80,8 @@ def test_groupnum_lessthandata():
     """
     mins = 0.5  # 30 sec input
     rawbunches = [60, 70, 65, 68, 71, 68, 66, 65, 73, 69, 66, 62]  # Minute worth of data
-    testinputless = new_hr_set(mins, rawbunches)
+    update_time = 5
+    testinputless = new_hr_set(mins, rawbunches, update_time)
     assert testinputless[0] == [60, 70, 65, 68, 71, 68]  # Output should be half a min
 
 

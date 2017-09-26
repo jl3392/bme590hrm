@@ -31,9 +31,13 @@ avgHR = avg_hr(newHRset[0], newHRset[1])
 
 # Brady/Tachycardia
 condition = bradtach(avgHR, mins)
+message = condition[1]
 
 # Output Information in .txt File
 
 HRinfo = open('HR_Information.txt', 'w')
-HRinfo.write("Estimated Instantaneous HR is {}".format(instantaneoushr),
-             "Estimated Average HR is {} over {} minutes".format(avgHR, mins), "{}".format(condition[1]))
+HRinfo.write("Estimated Instantaneous HR is {} beats per minute.".format(instantaneoushr))
+HRinfo.write("Estimated Average HR is {} beats per minute in minutes".format(avgHR, mins))
+HRinfo.write("{}".format(message))
+
+

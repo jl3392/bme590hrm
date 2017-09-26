@@ -16,7 +16,7 @@ min2sec = 60
 inst_time_period = 5  # In seconds
 
 
-def new_hr_set(mins, rawbunches):
+def new_hr_set(mins, rawbunches, update_time):
     """ returns realbunches, groupnum
 
     This function takes in raw instantaneous heart rate based on an averaging window set by the user, as well as minutes
@@ -28,6 +28,8 @@ def new_hr_set(mins, rawbunches):
 
     :param mins: minutes
     :param rawbunches: raw instantaneous heart rate data
+    :param update_time: windowing (seconds)
+    :type update_time: int
     :type mins: str (from user)
     :type rawbunches: list
     :return: realbunches - truncated instantaneous heart rate data set
@@ -41,18 +43,16 @@ def new_hr_set(mins, rawbunches):
         mins = mins
     elif isinstance(mins, complex) is True:
         raise ValueError('Please use real numbers.')
-    else:
-        mins = float(input('Please specify a time (in min) for averaging.'))
 
     # Conversion of minutes to seconds
     usersec = mins * min2sec
 
     # Must have number of groups be whole
     if usersec % inst_time_period == 0:
-        groupnum = int(usersec/inst_time_period)
+        groupnum = int(usersec/update_time)
     # Taking an additional groups if user input is between groups
     else:
-        groupnum = int(math.floor(usersec/inst_time_period) + 1)
+        groupnum = int(math.floor(usersec/update_time) + 1)
 
     # Take Niranjana's grouping output and truncating to fit user input
     # rawbunches = [80, 79, 85, 90, 77, 73]  # test data, should be inst_hr()
@@ -78,7 +78,7 @@ def avg_hr(realbunches, groupnum):
     """
     avghr = math.floor(sum(realbunches)/groupnum)
     return avghr
-    # print('The average heart rate for {} minute(s) was {} beats per minute'.format(mins, avghr))
+
 
 
 
