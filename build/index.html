@@ -113,12 +113,25 @@ truncated to go to &#8220;groupnum&#8221; amount of bunched sets.</p>
 <code class="descclassname">inst_hr.</code><code class="descname">inst_hr</code><span class="sig-paren">(</span><em>detected_peaks</em>, <em>update_time</em><span class="sig-paren">)</span><a class="headerlink" href="#inst_hr.inst_hr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function that calculates instantaneous heart rate every update_time seconds by counting number of peaks within
 update_time</p>
-<p>:param detected_peaks : list of detected peaks, returned using find_max_peaks function
-:param update_time : How often the instantaneous HR must be updated in seconds
-:type detected_peaks : list
-:type update_time : int/float
-:return inst_heart_rate : calculated instantaneous heart rate
-:rtype: nd array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>detected_peaks</strong> (<em>list</em>) &#8211; list of detected peaks, returned using find_max_peaks function</li>
+<li><strong>update_time</strong> (<em>int/float</em>) &#8211; How often the instantaneous HR must be updated in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return inst_heart_rate:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">calculated instantaneous heart rate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">nd array</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <span class="target" id="module-opencsv"></span><dl class="function">
@@ -149,16 +162,40 @@ update_time</p>
 <code class="descclassname">find_max_peaks.</code><code class="descname">find_max_peaks</code><span class="sig-paren">(</span><em>voltage_array</em>, <em>time_array</em>, <em>update_time</em>, <em>min_dist=150</em><span class="sig-paren">)</span><a class="headerlink" href="#find_max_peaks.find_max_peaks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function that will find local maximum of an array i.e peaks</p>
 <blockquote>
-<div>:param voltage_array : signal from which peaks are to be detected
-:param time_array : An array corresponding to the voltage array that has the same length
-:param min_dist : How many data points to wait before looking for peaks
-:param update_time : How often the instantaneous HR must be updated in seconds
-:type voltage_array : nd array
-:type time_array : nd array
-:type min_dist : int
-:type update_time : int/float
-:return total_peaks : list of all peaks detected, arranged into chunks based on update_time
-:rtype : list</div></blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param voltage_array:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">signal from which peaks are to be detected</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param time_array:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">An array corresponding to the voltage array that has the same length</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param min_dist:</th><td class="field-body">How many data points to wait before looking for peaks</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param update_time:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">How often the instantaneous HR must be updated in seconds</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">type voltage_array:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">nd array</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">type time_array:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">nd array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">type min_dist:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">type update_time:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">int/float</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">return total_peaks:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">list of all peaks detected, arranged into chunks based on update_time</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 </dd></dl>
 
 <span class="target" id="module-bradtach"></span><p>This module contains a function to tell a user whether or not they have a normal resting heart rate,
