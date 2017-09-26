@@ -1,4 +1,4 @@
-https://travis-ci.org/jl3392/bme590hrm.svg?branch=master
+[![Build Status](https://travis-ci.org/jl3392/bme590hrm.png?branch=master)](https://travis-ci.org/jl3392/bme590hrm)
 
 Heart Rate Monitor
 ======================
