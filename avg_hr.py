@@ -12,8 +12,7 @@ over a time period specified by the user in minutes.
 
 
 # Initialization
-min2sec = 60
-inst_time_period = 5  # In seconds
+min2sec = 60  # initializing conversion
 
 
 def new_hr_set(mins, rawbunches, update_time):
