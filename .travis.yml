@@ -16,9 +16,9 @@ install:
 script:
   - py.test # Run the tests
 
-branches:
-  only:
-  - ns_inst_hr
-  - il_avg_hr
-  - jl_test_csv
-  - il_bradtach
+# branches:
+  # only:
+  # - ns_inst_hr
+  # - il_avg_hr
+  # - jl_test_csv
+  # - il_bradtach
