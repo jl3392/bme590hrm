@@ -26,6 +26,7 @@ from contributors to users.
 Documentation
 ==============
 The latest documentation is automatically generated using Sphinx and can be found through the link below:
+http://bme590hrm.readthedocs.io/en/latest/
 
 
 Contributors
