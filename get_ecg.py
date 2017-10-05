@@ -33,11 +33,11 @@ class get_ecg:
         return avghr
 
     # Calculating brady-/tachycardia
-        if bradythreshold < avghr < tachythreshold:
+        if self.bradythreshold < avghr < self.tachythreshold:
             status = [2, 'You have a normal average heart rate over the period of {} minutes'.format(mins)]  # Normal
-        elif avghr >= tachythreshold:
+        elif avghr >= self.tachythreshold:
             status = [1, 'You have tachycardia over the period of {} minutes'.format(mins)]  # Tachycardia
-        elif avghr <= bradythreshold:
+        elif avghr <= self.bradythreshold:
             status = [0, 'You have bradycardia over the period of {} minutes'.format(mins)]  # Bradycardia
 
         return status
