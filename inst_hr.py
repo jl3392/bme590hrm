@@ -4,11 +4,11 @@ import opencsv
 
 def inst_hr(detected_peaks, update_time):
     """
-    Function that calculates instantaneous heart rate every update_time seconds by counting number of peaks within
-    update_time
+    Function that calculates instantaneous heart rate every update_time seconds
+    by counting number of peaks within update_time
 
-    :param detected_peaks: list of detected peaks, returned using find_max_peaks function
-    :param update_time: How often the instantaneous HR must be updated in seconds
+    :param detected_peaks: list of detected peaks
+    :param update_time: How often the instantaneous HR must be updated in s
     :type detected_peaks: list
     :type update_time: int/float
     :return inst_heart_rate: calculated instantaneous heart rate

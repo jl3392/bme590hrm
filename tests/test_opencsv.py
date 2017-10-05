@@ -20,4 +20,3 @@ def check_empty():
 
     f = opencsv.opencsv(filename)
     assert len(f) != 0
-

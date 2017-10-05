@@ -23,6 +23,3 @@ def test_tachy():
     mins = 1
     testtach = bradtach(avg_hr, mins)
     assert testtach[0] == 1
-
-
-

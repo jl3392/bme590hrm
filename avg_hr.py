@@ -5,9 +5,8 @@ import math
 
 """ Average Heart Rate.
 
-This module takes instantaneous HR inputs to output an average HR 
-over a time period specified by the user in minutes.  
-
+This module takes instantaneous HR inputs to output an average HR
+over a time period specified by the user in minutes.
 """
 
 
@@ -18,11 +17,13 @@ min2sec = 60  # initializing conversion
 def new_hr_set(mins, rawbunches, update_time):
     """ returns realbunches, groupnum
 
-    This function takes in raw instantaneous heart rate based on an averaging window set by the user, as well as minutes
-    specified by user input and returns groupnum and realbunches. Groupnum is the result of taking the user input,
-    converting it to seconds, and then dividing that number by the amount of the instantaneous heart rate window
-    duration (specified in our case as 5 seconds). This is effectively saying the user wants X amount of bunches from
-    the instantaneous HR data. Realbunches is a list that is the instantaneous heart rate array
+    This function takes in raw instantaneous heart rate based on an averaging
+    window set by the user, as well as minutes specified by user input
+    and returns groupnum and realbunches. Groupnum is the result of
+    taking the user input,converting it to seconds, and then dividing that
+    number by the amount of the instantaneous HR window duration.
+    This is effectively saying the user wants X amount of bunches from the
+    instantaneous HR data. Realbunches is a the instantaneous heart rate array
     truncated to go to "groupnum" amount of bunched sets.
 
     :param mins: minutes
@@ -32,7 +33,7 @@ def new_hr_set(mins, rawbunches, update_time):
     :type mins: str (from user)
     :type rawbunches: list
     :return: realbunches - truncated instantaneous heart rate data set
-    :return: groupnum - number of groups to take out of the raw inst HR set, based on user input
+    :return: groupnum - number of groups to take out of the raw inst HR set
     :rtype realbunches: list
     :rtype groupnum: int
 
@@ -55,7 +56,7 @@ def new_hr_set(mins, rawbunches, update_time):
 
     # Take Niranjana's grouping output and truncating to fit user input
     # rawbunches = [80, 79, 85, 90, 77, 73]  # test data, should be inst_hr()
-    if len(rawbunches) <= groupnum:  # Case for if user specified time is > number of indices of actual data
+    if len(rawbunches) <= groupnum:  # if user time is > data indices
         realbunches = rawbunches
     else:
         realbunches = rawbunches[0:groupnum]
@@ -65,23 +66,17 @@ def new_hr_set(mins, rawbunches, update_time):
 def avg_hr(realbunches, groupnum):
     """ returns avghr
 
-    This function takes in the outputs of new_hr_set to get the averaged HR over the user specified amount of time.
+    This function takes in the outputs of new_hr_set to get the
+    averaged HR over the user specified amount of time.
 
     :param realbunches: Truncated inst HR data set
     :param groupnum: # of groups
     :type realbunches: list
     :type groupnum: int
-    :return avghr: The average HR over the amount of time (min) specified by the user
+    :return avghr: The average HR over the amount of time (min)
+    specified by the user
     :rtype avghr: float, int
 
     """
     avghr = math.floor(sum(realbunches)/groupnum)
     return avghr
-
-
-
-
-
-
-
-

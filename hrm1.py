@@ -7,10 +7,10 @@ from avg_hr import new_hr_set
 from bradtach import bradtach
 
 """
-This module takes in a .csv file of ECG data and will yield instantaneous heart rates 
-for the whole data set.  It will also prompt the user to input a specific amount of 
-minutes, and then it will output the average HR over that time.  The module will also 
-tell whether or not the user has tachycardia, bradycardia, or a normal HR over the specified
+This module takes in a .csv file of ECG data and will yield instantaneous
+heart rates for the whole data set. It will also prompt the user to input time
+in minutes, and then will output the average HR over that time. The module also
+shows if user has tachycardia, bradycardia, or normal HR over the specified
 period of time.
 """
 
@@ -18,32 +18,28 @@ period of time.
 def hrmonitor(filepath):
     """
     :param filepath: ECG data location
-    :return: .txt file with instantaneous heart rate, average heart rate over user specified time and brady/tachycardia
-    occurrence
+    :return: .txt file all calculated outputs
     """
     # Importing csv data
     data = opencsv(filepath)  # Update path or add file to root folder
     time = data[0]
     voltage = data[1]
-    
-    # Instantaneous heart rate
-    maxpeaks = find_max_peaks(voltage, time, update_time=5)  # Instantaneous HR updates every 5 seconds [configurable]
+    # Instantaneous heart rate that updates every 5s
+    maxpeaks = find_max_peaks(voltage, time, update_time=5)
     instantaneoushr = inst_hr(maxpeaks, update_time=5)
-    
     # Average heart rate
     mins = float(input('Please specify a time (in min) for averaging.'))
     newHRset = new_hr_set(mins, instantaneoushr, update_time=5)
     avgHR = avg_hr(newHRset[0], newHRset[1])
-    
     # Brady/Tachycardia
     condition = bradtach(avgHR, mins)
     message = condition[1]
-    
     # Output Information in .txt File
-    
     HRinfo = open('HR_Information.txt', 'w')
-    HRinfo.write("Estimated Instantaneous HR is {} beats per minute.".format(instantaneoushr))
-    HRinfo.write("/nEstimated Average HR is {} beats per minute in minutes/n".format(avgHR, mins))
+    HRinfo.write("Estimated Instantaneous HR is {} beats per minute."
+                 .format(instantaneoushr))
+    HRinfo.write("/nEstimated Average HR is {} beats per minute in minutes/n"
+                 .format(avgHR, mins))
     HRinfo.write("/n{}/n".format(message))
 
 if __name__ == "__main__":
@@ -52,8 +48,8 @@ if __name__ == "__main__":
     extime = exampledata[0]
     exvoltage = exampledata[1]
 
-    # Instantaneous heart rate
-    exmaxpeaks = find_max_peaks(exvoltage, extime, update_time=5)  # Inst HR updates every 5 seconds [configurable]
+    # Instantaneous heart rate updates every 5s
+    exmaxpeaks = find_max_peaks(exvoltage, extime, update_time=5)
     exinstantaneoushr = inst_hr(exmaxpeaks, update_time=5)
 
     # Average heart rate
@@ -65,7 +61,8 @@ if __name__ == "__main__":
     excondition = bradtach(exavgHR, exmins)
     exmessage = excondition[1]
 
-    print("Estimated Instantaneous HR is {} beats per minute.".format(exinstantaneoushr))
-    print("Estimated Average HR is {} beats per minute in minutes".format(exavgHR, exmins))
+    print("Estimated Instantaneous HR is {} beats per minute."
+          .format(exinstantaneoushr))
+    print("Estimated Average HR is {} beats per minute in minutes"
+          .format(exavgHR, exmins))
     print("{}".format(exmessage))
-

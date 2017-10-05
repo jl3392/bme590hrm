@@ -6,14 +6,14 @@ def find_max_peaks(voltage_array, time_array, update_time, min_dist=150):
     Function that will find local maximum of an array i.e peaks
 
        :param voltage_array: signal from which peaks are to be detected
-       :param time_array: An array corresponding to the voltage array that has the same length
+       :param time_array: An array of same length as the voltage array
        :param min_dist: How many data points to wait before looking for peaks
-       :param update_time: How often the instantaneous HR must be updated in seconds
+       :param update_time: How often the instantaneous HR must be updated in s
        :type voltage_array: nd array
        :type time_array: nd array
        :type min_dist: int
        :type update_time: int/float
-       :return total_peaks: list of all peaks detected, arranged into chunks based on update_time
+       :return total_peaks: list of all peaks detected within update_time
        :rtype: list
 
     """

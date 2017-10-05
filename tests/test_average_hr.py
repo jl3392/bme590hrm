@@ -22,7 +22,8 @@ def test_new_hr_set_equal():
 
 def test_new_hr_set_between():
     """
-    Checks for when user input is not divisible by predetermined window (e.g. 0.67 min)
+    Checks for when user input is not divisible by predetermined window
+    (e.g. 0.67 min)
     """
     min2 = 0.67
     rawbunches = [80, 79, 85, 90, 77, 73]
@@ -49,7 +50,8 @@ class TestComplex(unittest.TestCase):
         """
         rawbunches = [80, 79, 85, 90, 77, 73]
         update_time = 5
-        self.assertRaises(ValueError, new_hr_set, 2j+9, rawbunches, update_time)
+        self.assertRaises(ValueError, new_hr_set, 2j+9,
+                          rawbunches, update_time)
 
 
 def test_groupnum_greaterthan_data():
@@ -57,7 +59,8 @@ def test_groupnum_greaterthan_data():
     This tests when user inputs a time greater than the data set allows
     """
     mins = 5  # User input 5 minutes
-    rawbunches = [65, 70, 68, 77, 74, 68, 64, 65, 64, 78]  # Data set only has bunches for 50 sec
+    # Data set only has bunches for 50 sec
+    rawbunches = [65, 70, 68, 77, 74, 68, 64, 65, 64, 78]
     update_time = 5
     testinputgreater = new_hr_set(mins, rawbunches, update_time)
     assert testinputgreater[0] == rawbunches
@@ -79,10 +82,12 @@ def test_groupnum_lessthandata():
     Tests when input is less than data set
     """
     mins = 0.5  # 30 sec input
-    rawbunches = [60, 70, 65, 68, 71, 68, 66, 65, 73, 69, 66, 62]  # Minute worth of data
+    # Minute worth of data
+    rawbunches = [60, 70, 65, 68, 71, 68, 66, 65, 73, 69, 66, 62]
     update_time = 5
     testinputless = new_hr_set(mins, rawbunches, update_time)
-    assert testinputless[0] == [60, 70, 65, 68, 71, 68]  # Output should be half a min
+    # Output should be half a min
+    assert testinputless[0] == [60, 70, 65, 68, 71, 68]
 
 
 def test_avg_hr():
@@ -101,11 +106,3 @@ def test_avg_hr_float():
     realbunches = [80.1, 87.5, 83.4, 90, 76.5]
     groupnum = 5
     assert avg_hr(realbunches, groupnum) == 83
-
-
-
-
-
-
-
-
