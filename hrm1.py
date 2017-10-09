@@ -5,6 +5,7 @@ from inst_hr import inst_hr
 from avg_hr import avg_hr
 from avg_hr import new_hr_set
 from bradtach import bradtach
+from glob import glob
 
 """
 This module takes in a .csv file of ECG data and will yield instantaneous
@@ -44,9 +45,18 @@ def hrmonitor(filepath):
 
 if __name__ == "__main__":
     # Importing csv data
-    exampledata = opencsv('Data/ecg_data.csv')
-    extime = exampledata[0]
-    exvoltage = exampledata[1]
+    # Create the list of file
+    list_of_files = glob.glob('Data/*.csv')
+    for file_name in list_of_files:
+        FI = open(file_name, 'r')
+        for line in FI:
+            extime = file_name[0]
+            exvoltage = file_name[1]
+        FI.close()
+
+    # exampledata = opencsv('Data/ecg_data.csv')
+    # extime = exampledata[0]
+    # exvoltage = exampledata[1]
 
     # Instantaneous heart rate updates every 5s
     exmaxpeaks = find_max_peaks(exvoltage, extime, update_time=5)
