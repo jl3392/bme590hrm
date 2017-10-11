@@ -5,7 +5,7 @@ from inst_hr import inst_hr
 from avg_hr import avg_hr
 from avg_hr import new_hr_set
 from bradtach import bradtach
-from glob import glob
+import glob
 
 """
 This module takes in a .csv file of ECG data and will yield instantaneous
@@ -31,7 +31,7 @@ def hrmonitor(filepath):
     # Average heart rate
     mins = float(input('Please specify a time (in min) for averaging.'))
     newHRset = new_hr_set(mins, instantaneoushr, update_time=5)
-    avgHR = avg_hr(newHRset[0], newHRset[1])
+    avgHR = avg_hr(newHRset[0])
     # Brady/Tachycardia
     condition = bradtach(avgHR, mins)
     message = condition[1]
@@ -46,12 +46,10 @@ def hrmonitor(filepath):
 if __name__ == "__main__":
     # Importing csv data
     # Create the list of file
-    list_of_files = glob.glob('Data/*.csv')
+    list_of_files = glob.glob('test_data/*.csv')
     for file_name in list_of_files:
         FI = open(file_name, 'r')
-        for line in FI:
-            extime = file_name[0]
-            exvoltage = file_name[1]
+        hrmonitor(FI)
         FI.close()
 
     # exampledata = opencsv('Data/ecg_data.csv')
@@ -59,20 +57,20 @@ if __name__ == "__main__":
     # exvoltage = exampledata[1]
 
     # Instantaneous heart rate updates every 5s
-    exmaxpeaks = find_max_peaks(exvoltage, extime, update_time=5)
-    exinstantaneoushr = inst_hr(exmaxpeaks, update_time=5)
+    # exmaxpeaks = find_max_peaks(exvoltage, extime, update_time=5)
+    # exinstantaneoushr = inst_hr(exmaxpeaks, update_time=5)
 
     # Average heart rate
-    exmins = float(input('Please specify a time (in min) for averaging.'))
-    exnewHRset = new_hr_set(exmins, exinstantaneoushr, update_time=5)
-    exavgHR = avg_hr(exnewHRset[0], exnewHRset[1])
+    # exmins = float(input('Please specify a time (in min) for averaging.'))
+    # exnewHRset = new_hr_set(exmins, exinstantaneoushr, update_time=5)
+    # exavgHR = avg_hr(exnewHRset[0], exnewHRset[1])
 
     # Brady/Tachycardia
-    excondition = bradtach(exavgHR, exmins)
-    exmessage = excondition[1]
+    # excondition = bradtach(exavgHR, exmins)
+    # exmessage = excondition[1]
 
-    print("Estimated Instantaneous HR is {} beats per minute."
-          .format(exinstantaneoushr))
-    print("Estimated Average HR is {} beats per minute in minutes"
-          .format(exavgHR, exmins))
-    print("{}".format(exmessage))
+    # print("Estimated Instantaneous HR is {} beats per minute."
+         # .format(exinstantaneoushr))
+    # print("Estimated Average HR is {} beats per minute in minutes"
+         # .format(exavgHR, exmins))
+    # print("{}".format(exmessage))
