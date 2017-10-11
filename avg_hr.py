@@ -63,7 +63,7 @@ def new_hr_set(mins, rawbunches, update_time):
     return realbunches, groupnum
 
 
-def avg_hr(realbunches, groupnum):
+def avg_hr(realbunches):
     """ returns avghr
 
     This function takes in the outputs of new_hr_set to get the
@@ -78,5 +78,5 @@ def avg_hr(realbunches, groupnum):
     :rtype avghr: float, int
 
     """
-    avghr = math.floor(sum(realbunches)/groupnum)
+    avghr = math.floor(sum(realbunches)/len(realbunches))
     return avghr
