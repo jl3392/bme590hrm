@@ -16,7 +16,7 @@ period of time.
 """
 
 
-def hrmonitor(filepath):
+def hrmonitor(filepath,output_name):
     """
     :param filepath: ECG data location
     :return: .txt file all calculated outputs
@@ -36,7 +36,7 @@ def hrmonitor(filepath):
     condition = bradtach(avgHR, mins)
     message = condition[1]
     # Output Information in .txt File
-    HRinfo = open('HR_Information.txt', 'w')
+    HRinfo = open('{}_HR_Information.txt'.format(output_name), 'w')
     HRinfo.write("Estimated Instantaneous HR is {} beats per minute."
                  .format(instantaneoushr))
     HRinfo.write("/nEstimated Average HR is {} beats per minute in minutes/n"
@@ -49,7 +49,8 @@ if __name__ == "__main__":
     list_of_files = glob.glob('test_data/*.csv')
     for file_name in list_of_files:
         FI = open(file_name, 'r')
-        hrmonitor(FI)
+        output_name = file_name[:-4]
+        hrmonitor(filepath = FI,output_name=output_name)
         FI.close()
 
     # exampledata = opencsv('Data/ecg_data.csv')
