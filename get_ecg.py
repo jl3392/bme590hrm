@@ -1,6 +1,12 @@
 class get_ecg:
 
     def get_avghr(self):
+        """ returns avghr
+
+            Function gets avghr over user-specified minutes window.
+            Also gives clinical indication of tachy/bradycardia
+        """
+
         if isinstance(mins, float) is True or isinstance(mins, int) is True:
             mins = mins
         elif isinstance(mins, complex) is True:
