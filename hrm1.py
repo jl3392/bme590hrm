@@ -19,6 +19,7 @@ period of time.
 def hrmonitor(filepath,output_name):
     """
     :param filepath: ECG data location
+    :param output_name : Output file name
     :return: .txt file all calculated outputs
     """
     # Importing csv data
