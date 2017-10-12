@@ -1,3 +1,7 @@
+import numpy as np
+import math
+
+
 class GetEcg:
 
     """
@@ -6,7 +10,8 @@ class GetEcg:
     """
     min2sec = 60
 
-    def __init__(self,csv_file=None, update_time=5, brady_threshold = 60, tachy_threshold = 100):
+    def __init__(self, csv_file=None, update_time=5,
+                 brady_threshold=60, tachy_threshold=100):
         """
         Constructor for ECG processing needs the input csv file to work on and
         time for often to update the instantaneous HR
@@ -26,6 +31,8 @@ class GetEcg:
             self.tachy_threshold = tachy_threshold
 
         self.raw_bunches = []
+        self.total_peaks = []
+
     def get_max_peak(self):
         """
            Function that will find local maximum of an array i.e peaks
@@ -37,9 +44,9 @@ class GetEcg:
            """
         min_dist = 150
         if isinstance(self.update_time, float):
-         self.update_time = int(self.update_time)
-         total_time = self.time_array[-1] - self.time_array[1]
-         bunches = total_time/self.update_time
+            self.update_time = int(self.update_time)
+        total_time = self.time_array[-1] - self.time_array[1]
+        bunches = total_time/self.update_time
 
         if total_time / self.update_time < 1:
             raise ValueError("Update time is longer than signal length")
@@ -49,70 +56,65 @@ class GetEcg:
 
         if length % bunches != 0:
             np.delete(divided_voltage_array, -1)
-         for i in range(len(divided_voltage_array)):
-             dump = []
-             new_time_array = divided_time_array[i]
-             new_voltage_array = divided_voltage_array[i]
-             max_peaks = []
+        for i in range(len(divided_voltage_array)):
+            dump = []
+            new_time_array = divided_time_array[i]
+            new_voltage_array = divided_voltage_array[i]
+            max_peaks = []
 
-             mx, mn = -np.Inf, np.Inf
+            mx, mn = -np.Inf, np.Inf
 
-             for index, (x, y) in enumerate(zip(new_time_array,
-                                                new_voltage_array)):
-                 if y > mx:
-                     mx = y
-                     mxpos = x
-                 if y < mn:
-                     mn = y
+            for index, (x, y) in enumerate(zip(new_time_array,
+                                               new_voltage_array)):
+                if y > mx:
+                    mx = y
+                    mxpos = x
+                if y < mn:
+                    mn = y
 
-                 # Looking for max
-                 if y < mx and mx != np.Inf:
-                     # Maxima peak candidate found
-                     if new_voltage_array[index:index + min_dist].max() < mx:
-                         max_peaks.append([mxpos, mx])
-                         dump.append(True)
-                         # set algorithm to only find minima now
-                         mn = np.Inf
-                         mx = np.Inf
-                         if index + min_dist >= length:
-                             # end is within lookahead no more peaks can be found
-                             break
-                         continue
+                # Looking for max
+                if y < mx and mx != np.Inf:
+                    # Maxima peak candidate found
+                    if new_voltage_array[index:index + min_dist].max() < mx:
+                        max_peaks.append([mxpos, mx])
+                        dump.append(True)
+                        # set algorithm to only find minima now
+                        mn = np.Inf
+                        mx = np.Inf
+                        if index + min_dist >= length:
+                            # end is within lookahead no more peaks
+                            break
+                        continue
 
-                 if y > mn and mn != -np.Inf:
-                     if new_voltage_array[index:index + min_dist].min() > mn:
-                         dump.append(False)
-                         mn = -np.Inf
-                         mx = -np.Inf
-                         if index + min_dist >= length:
-                             break
+                if y > mn and mn != -np.Inf:
+                    if new_voltage_array[index:index + min_dist].min() > mn:
+                        dump.append(False)
+                        mn = -np.Inf
+                        mx = -np.Inf
+                        if index + min_dist >= length:
+                            break
 
-             self.total_peaks.append(max_peaks)
-             # Remove the false hit on the first value of the y_axis
-             try:
-                 if dump[0]:
-                     max_peaks.pop(0)
-                 del dump
-             except IndexError:
+            self.total_peaks.append(max_peaks)
+            # Remove the false hit on the first value of the y_axis
+            try:
+                if dump[0]:
+                    max_peaks.pop(0)
+                del dump
+            except IndexError:
                     # no peaks were found
                     print("No peaks were found")
 
         return self.total_peaks
 
-
-    def get_inst_hr(self, total_peaks):
+    def get_inst_hr(self):
         """
-           Function that calculates instantaneous heart rate every update_time seconds
+           Function that calculates inst heart rate every update_time seconds
            by counting number of peaks within update_time
 
-           :param total_peaks: list of detected peaks, returned using
-            find_max_peaks function
-           :return self.raw_bunches: divided the total_peaks into customized peaks
+           :return self.raw_bunches: divided the total_peaks into custom peaks
            :rtype: nd array
 
            """
-
-        self.total_peaks = total_peaks
 
         num_of_peaks = []
         if isinstance(self.update_time, float):
@@ -123,14 +125,17 @@ class GetEcg:
         inst_heart_rate = new_array / self.update_time
         self.raw_bunches = inst_heart_rate * 60
         return self.raw_bunches
-    
+
     def get_avghr(self):
         """ returns avghr
 
             Function gets avghr over user-specified minutes window.
             Also gives clinical indication of tachy/bradycardia
-        """
 
+            :return avg_hr: Avg hr
+            :return status: Brady or tachycardia
+        """
+        mins = float(input('Please specify a time (in min) for averaging.'))
         if isinstance(mins, float) is True or isinstance(mins, int) is True:
             mins = mins
         elif isinstance(mins, complex) is True:
@@ -150,10 +155,9 @@ class GetEcg:
             real_bunches = self.raw_bunches
         else:
             real_bunches = self.raw_bunches[0:group_num]
-            
+
     # Calculating the avghr
         avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
-        return avg_hr
 
     # Calculating brady-/tachycardia
         if self.brady_threshold < avg_hr < self.tachy_threshold:
@@ -166,4 +170,4 @@ class GetEcg:
             status = [0, 'You have bradycardia over '
                          'the period of {} minutes'.format(mins)]  # Brady
 
-        return status
+        return [status, avg_hr]
