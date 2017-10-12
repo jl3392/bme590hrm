@@ -3,7 +3,7 @@ class get_ecg:
     Creating this class to convert raw ECG data of all types into HR data and clinical indication of brady-/tachycardia.
     """
 
-    def __init__(self,opencsv):
+    def __init__(self, opencsv):
         self.opencsv = opencsv
 
     def get_avghr(self):
@@ -29,7 +29,7 @@ class get_ecg:
             realbunches = self.rawbunches[0:groupnum]
 
     # Calculating the avghr
-        avghr = math.floor(sum(realbunches) / groupnum)
+        avghr = math.floor(sum(realbunches)/len(realbunches))
         return avghr
 
     # Calculating brady-/tachycardia
