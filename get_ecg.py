@@ -11,15 +11,16 @@ class get_ecg:
         if isinstance(self.update_time, float):
          update_time = int(self.update_time)
          total_time = self.time_array[-1] - self.time_array[1]
+         bunches = total_time/update_time
 
         if total_time / update_time < 1:
             raise ValueError("Update time is longer than signal length")
-        divided_voltage_array = np.array_split(self.voltage_array, self.update_time)
-        divided_time_array = np.array_split(self.time_array, self.update_time)
+        divided_voltage_array = np.array_split(self.voltage_array, bunches)
+        divided_time_array = np.array_split(self.time_array, bunches)
         length = len(self.voltage_array)
 
-        if length % update_time != 0:
-             np.delete(divided_voltage_array, -1)
+        if length % bunches != 0:
+            np.delete(divided_voltage_array, -1)
          for i in range(len(divided_voltage_array)):
              dump = []
              new_time_array = divided_time_array[i]
