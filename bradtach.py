@@ -8,12 +8,7 @@ that will determine which thresholds to use for the conditions.
 """
 
 
-# Initializing variables
-bradythreshold = 60  # For normal adults
-tachythreshold = 100  # For normal adults
-
-
-def bradtach(avghr, mins):
+def bradtach(avghr, mins, bradythreshold=60, tachythreshold=100):
     """ returns status
 
     This function takes avghr from the avg_hr.py module and returns a status of
@@ -21,6 +16,8 @@ def bradtach(avghr, mins):
 
     :param avghr: Average Heart Rate
     :param mins: User specified minutes
+    :param bradythreshold: Threshold in bpm for bradychardia
+    :param tachythreshold: Threshold in bpm for tachycardia
     :type avghr: int, float
     :param mins: float
     :return status: Condition of patient in numerical form

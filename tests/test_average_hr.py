@@ -95,8 +95,7 @@ def test_avg_hr():
     Simple averaging
     """
     realbunches = [80, 79, 85, 90, 77, 73]
-    groupnum = 6
-    assert avg_hr(realbunches, groupnum) == 80
+    assert avg_hr(realbunches) == 80
 
 
 def test_avg_hr_float():
@@ -104,5 +103,4 @@ def test_avg_hr_float():
     Testing with float values
     """
     realbunches = [80.1, 87.5, 83.4, 90, 76.5]
-    groupnum = 5
-    assert avg_hr(realbunches, groupnum) == 83
+    assert avg_hr(realbunches) == 83
