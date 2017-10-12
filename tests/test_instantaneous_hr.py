@@ -15,7 +15,7 @@ def test_find_max_peaks():
     peaks = find_max_peaks(voltage_array=sample_voltage_array,
                            time_array=sample_time_array, min_dist=150,
                            update_time=3)
-    assert peaks ==  [[[8.6739999999999995, 0.54249999999999998],
+    assert peaks == [[[8.6739999999999995, 0.54249999999999998],
                       [9.3260000000000005, 0.59950000000000003],
                       [9.9879999999999995, 0.63800000000000001],
                       [10.654, 0.64949999999999997],

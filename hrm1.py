@@ -54,26 +54,3 @@ if __name__ == "__main__":
         output_name = file_name[:-4]
         hrmonitor(filepath=FI, output_name=output_name)
         FI.close()
-
-    # exampledata = opencsv('Data/ecg_data.csv')
-    # extime = exampledata[0]
-    # exvoltage = exampledata[1]
-
-    # Instantaneous heart rate updates every 5s
-    # exmaxpeaks = find_max_peaks(exvoltage, extime, update_time=5)
-    # exinstantaneoushr = inst_hr(exmaxpeaks, update_time=5)
-
-    # Average heart rate
-    # exmins = float(input('Please specify a time (in min) for averaging.'))
-    # exnewHRset = new_hr_set(exmins, exinstantaneoushr, update_time=5)
-    # exavgHR = avg_hr(exnewHRset[0], exnewHRset[1])
-
-    # Brady/Tachycardia
-    # excondition = bradtach(exavgHR, exmins)
-    # exmessage = excondition[1]
-
-    # print("Estimated Instantaneous HR is {} beats per minute."
-         # .format(exinstantaneoushr))
-    # print("Estimated Average HR is {} beats per minute in minutes"
-         # .format(exavgHR, exmins))
-    # print("{}".format(exmessage))
