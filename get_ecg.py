@@ -1,19 +1,13 @@
-class get_ecg:
-    """
-    Creating this class to convert raw ECG data of all types into HR data and clinical indication of brady-/tachycardia.
-    """
-
-    def __init__(self, opencsv):
-        self.opencsv = opencsv
+class GetEcg:
 
     def get_max_peak(self):
-        total_peaks =[]
+        min_dist = 150
         if isinstance(self.update_time, float):
-         update_time = int(self.update_time)
+         self.update_time = int(self.update_time)
          total_time = self.time_array[-1] - self.time_array[1]
-         bunches = total_time/update_time
+         bunches = total_time/self.update_time
 
-        if total_time / update_time < 1:
+        if total_time / self.update_time < 1:
             raise ValueError("Update time is longer than signal length")
         divided_voltage_array = np.array_split(self.voltage_array, bunches)
         divided_time_array = np.array_split(self.time_array, bunches)
@@ -59,27 +53,31 @@ class get_ecg:
                          if index + min_dist >= length:
                              break
 
-             total_peaks.append(max_peaks)
+             self.total_peaks.append(max_peaks)
              # Remove the false hit on the first value of the y_axis
              try:
                  if dump[0]:
                      max_peaks.pop(0)
                  del dump
              except IndexError:
-                 # no peaks were found
-                 print("No peaks were found")
+                    # no peaks were found
+                    print("No peaks were found")
 
-         return total_peaks
+        return self.total_peaks
 
-    def get_inst_hr(self,get_max_peak):
+
+    def get_inst_hr(self, total_peaks):
+
+        self.total_peaks = total_peaks
 
         num_of_peaks = []
         if isinstance(self.update_time, float):
-            update_time = int(self.update_time)
-        for i in range(len(get_max_peak)):
-            num_of_peaks.append(len(get_max_peak[i]))
+            self.update_time = int(self.update_time)
+        for i in range(len(self.total_peaks)):
+            num_of_peaks.append(len(self.total_peaks[i]))
         new_array = np.array(num_of_peaks)
         inst_heart_rate = new_array / self.update_time
-        return inst_heart_rate * 60
+        self.raw_bunches = inst_heart_rate * 60
+        return self.raw_bunches
 
 
