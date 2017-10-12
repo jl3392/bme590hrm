@@ -27,6 +27,15 @@ class GetEcg:
 
         self.raw_bunches = []
     def get_max_peak(self):
+        """
+           Function that will find local maximum of an array i.e peaks
+
+              :type min_dist: int
+              :type update_time: int/float
+              :return total_peaks: list of all peaks detected, arranged into chunks based on update_time
+              :rtype: list
+
+           """
         min_dist = 150
         if isinstance(self.update_time, float):
          self.update_time = int(self.update_time)
@@ -93,7 +102,15 @@ class GetEcg:
 
 
     def get_inst_hr(self, total_peaks):
+        """
+           Function that calculates instantaneous heart rate every update_time seconds
+           by counting number of peaks within update_time
+           :param total_peaks: list of detected peaks, returned using get_max_peaks function
+           :type total_peaks: list
+           :return self.raw_bunches: calculated instantaneous heart rate
 
+
+           """
         self.total_peaks = total_peaks
 
         num_of_peaks = []
