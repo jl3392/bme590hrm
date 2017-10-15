@@ -33,6 +33,11 @@ class GetEcg:
         self.raw_bunches = []
         self.total_peaks = []
 
+        if isinstance(update_time,float):
+            update_time =int(update_time)
+        elif isinstance(update_time, str):
+            print('the update time should not be a string,please fix it.')
+
     def get_max_peak(self):
         """
            Function that will find local maximum of an array i.e peaks
@@ -43,8 +48,7 @@ class GetEcg:
 
            """
         min_dist = 150
-        if isinstance(self.update_time, float):
-            self.update_time = int(self.update_time)
+        self.update_time = int(self.update_time)
         total_time = self.time_array[-1] - self.time_array[1]
         bunches = total_time/self.update_time
 
