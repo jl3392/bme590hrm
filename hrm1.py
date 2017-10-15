@@ -6,7 +6,7 @@ from avg_hr import avg_hr
 from avg_hr import new_hr_set
 from bradtach import bradtach
 import glob
-import pandas as pd 
+import pandas as pd
 
 """
 This module takes in a .csv file of ECG data and will yield instantaneous
