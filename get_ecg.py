@@ -2,13 +2,13 @@ import numpy as np
 import math
 
 
-class GetEcg:
+class Ecg:
 
     """
     Creating this class to convert raw ECG data of all types into HR data
     and clinical indication of brady-/tachycardia.
     """
-    min2sec = 60
+    MIN_SEC = 60
 
     def __init__(self, csv_file=None, update_time=5,
                  brady_threshold=60, tachy_threshold=100):
@@ -153,7 +153,7 @@ class GetEcg:
         elif isinstance(mins, complex) is True:
             raise ValueError('Please use real numbers.')
 
-        user_sec = mins * self.min2sec
+        user_sec = mins * self.MIN_SEC
 
     # Must have number of groups be whole
         if user_sec % self.update_time == 0:
