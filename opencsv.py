@@ -31,19 +31,17 @@ def opencsv(variables_file):
     """
     df = pd.read_csv(variables_file, header=None)
     df.columns = ['time', 'voltage']
-    df.voltage.astype(float).fillna(0.00)
-    df.time.astype(float).fillna(0.00)
     for i in df.voltage:
-        if isinstance(i, str):
+        if df.voltage[i].astype(str):
             if i == df.voltage[0]:
-               df.voltage[0] = 0.0
+                df.voltage[i] = 0.0
             else:
                 df.voltage[i] = df.voltage[i-1]
         else:
             df.voltage.astype(float).fillna(df.voltage[i-1])
 
     for i in df.time:
-        if isinstance(i, str):
+        if df.time[i].astype(str):
             if i == df.time[0]:
                 df.time[0] = 0.0
             else:
