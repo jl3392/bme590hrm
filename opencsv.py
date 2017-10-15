@@ -33,9 +33,17 @@ def opencsv(variables_file):
     df.columns = ['time', 'voltage']
     df.voltage.astype(float).fillna(0.0)
     df.time.astype(float).fillna(0.0)
+    for i in df.voltage:
+        if isinstance(i, str):
+            i = 0.0
+
+    for i in df.time:
+        if isinstance(i, str):
+            i = 0.0
+
     df = df.values
     time = df[:, 0]
-    voltage = df [:,1]
+    voltage = df[:, 1]
     #data = np.loadtxt(variables_file, dtype='float', delimiter=",", skiprows=1)
     #time = np.array(data[:, 0])
     #voltage = np.array(data[:, 1])
