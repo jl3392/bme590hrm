@@ -39,8 +39,9 @@ def opencsv(variables_file):
                df.voltage[0] = 0.0
             else:
                 df.voltage[i] = df.voltage[i-1]
-        elif isinstance(i, float):
+        else:
             df.voltage.astype(float).fillna(df.voltage[i-1])
+
     for i in df.time:
         if isinstance(i, str):
             if i == df.time[0]:
