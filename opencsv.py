@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+import pandas as pd
 
 """
 :mod:`opencsv` -- open the csv file and covert the data into numpy array
@@ -28,8 +29,10 @@ def opencsv(variables_file):
     :rtype voltage: numpy array
 
     """
-
-    data = np.loadtxt(variables_file, dtype='float', delimiter=",", skiprows=1)
-    time = np.array(data[:, 0])
-    voltage = np.array(data[:, 1])
+    df = pd.read_csv(variables_file, header = None)
+    df.columns = ['time', 'voltage']
+    df.voltage.astype(float).fillna(0.0)
+    df.time.astype(float).fillna(0.0)
+    time = df.time
+    voltage = df.voltage
     return time, voltage
