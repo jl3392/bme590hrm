@@ -29,7 +29,7 @@ def opencsv(variables_file):
     :rtype voltage: numpy array
 
     """
-    df = pd.read_csv(variables_file, header = None)
+    df = pd.read_csv(variables_file, header=None)
     df.columns = ['time', 'voltage']
     df.voltage.astype(float).fillna(0.0)
     df.time.astype(float).fillna(0.0)
