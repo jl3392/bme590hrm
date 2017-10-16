@@ -31,10 +31,10 @@ def opencsv(variables_file):
     """
     df = pd.read_csv(variables_file, header=None)
     df.columns = ['time', 'voltage']
-    df.fillna(method='pad')
-    #voltage = pd.to_numeric(df.voltage)
-    #time = pd.to_numeric(df.time)
-    # data = np.loadtxt(variables_file, dtype='float', delimiter=",", skiprows=1)
-    # time = np.array(data[:, 0])
-    # voltage = np.array(data[:, 1])
-    return df
+    voltage = pd.to_numeric(df.voltage, errors='coerce')
+    time = pd.to_numeric(df.time, errors='coerce')
+    voltage = voltage.fillna(method='pad')
+    time = time.fillna(method='pad')
+    voltage = voltage.as_matrix()
+    time = time.as_matrix()
+    return voltage, time
