@@ -37,4 +37,4 @@ def opencsv(variables_file):
     time = time.fillna(method='pad')
     voltage = voltage.as_matrix()
     time = time.as_matrix()
-    return voltage, time
+    return time, voltage
