@@ -30,26 +30,10 @@ def opencsv(variables_file):
 
     """
     df = pd.read_csv(variables_file, header=None)
-
     df.columns = ['time', 'voltage']
-    for i in df.voltage:
-        if df.voltage[i].astype(str):
-            if i == df.voltage[0]:
-                df.voltage[i] = 0.0
-            else:
-                df.voltage[i] = df.voltage[i-1]
-        else:
-            df.voltage.astype(float).fillna(df.voltage[i-1])
-
-    for i in df.time:
-        if df.time[i].astype(str):
-            if i == df.time[0]:
-                df.time[0] = 0.0
-            else:
-                df.time[i] = df.voltage[i-1] + df.voltage[i-1]-df.voltage[i-2]
-    df = df.values
-    time = df[:, 0]
-    voltage = df[:, 1]
+    df.fillna(method='pad')
+    voltage = pd.to_numeric(df.voltage)
+    time = pd.to_numeric(df.time)
     # data = np.loadtxt(variables_file, dtype='float', delimiter=",", skiprows=1)
     # time = np.array(data[:, 0])
     # voltage = np.array(data[:, 1])
