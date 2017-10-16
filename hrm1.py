@@ -25,8 +25,8 @@ def hrmonitor(filepath, output_name):
     """
     # Importing csv data
     data = opencsv(filepath)  # Update path or add file to root folder
-    time = data[0]
-    voltage = data[1]
+    time = data['time']
+    voltage = data['voltage']
     # Instantaneous heart rate that updates every 5s
     maxpeaks = find_max_peaks(voltage, time, update_time=5)
     instantaneoushr = inst_hr(maxpeaks, update_time=5)
