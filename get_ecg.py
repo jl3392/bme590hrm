@@ -51,22 +51,22 @@ class Ecg:
         Method that prepares data for get_max_peaks
         :return: none
         """
+        if isinstance(self.update_time, float):
+            self.update_time = int(self.update_time)
+        elif isinstance(self.update_time, str):
+            raise ValueError('Update time must be a number')
         total_time = self.time_array[-1] - self.time_array[1]
         num_groups = total_time / self.update_time  # inst HR groups
 
         if num_groups < 1:
             raise ValueError("Update time is longer than signal length")
-        self.divided_voltage_array = np.array_split(self.voltage_array, num_groups)  # pep8
+        self.divided_voltage_array = np.array_split(self.voltage_array,
+                                                    num_groups)  # pep8
         self.divided_time_array = np.array_split(self.time_array, num_groups)
         length = len(self.voltage_array)
 
         if length % num_groups != 0:  # ignore last group if ~= to others
             np.delete(self.divided_voltage_array, -1)
-
-        if isinstance(self.update_time, float):
-            self.update_time = int(self.update_time)
-        elif isinstance(self.update_time, str):
-            print('the update time should not be a string,please fix it.')
 
     def get_max_peak(self):
         """
@@ -83,46 +83,48 @@ class Ecg:
             new_voltage_array = self.divided_voltage_array[i]
             max_peaks = []
 
-            mx, mn = -np.Inf, np.Inf  # tmp var to hold max, min
+            tmp_max, tmp_min = -np.Inf, np.Inf  # tmp var to hold max, min
 
-            for index, (x, y) in enumerate(zip(new_time_array,
-                                               new_voltage_array)):
-                if y > mx:  # if current value is > tmp
-                    mx = y  # tmp = current
+            for index, (x, current_val) in enumerate(zip(new_time_array,
+                                                         new_voltage_array)):
+                if current_val > tmp_max:  # if current value is > tmp
                     max_pos = x
-                if y < mn:
-                    mn = y
+                    tmp_max = current_val  # tmp = current
+
+                if current_val < tmp_min:
+                    tmp_min = current_val
 
                 # Look for local max
-                if y < mx:
-                    if mx != np.Inf:
-                        if new_voltage_array[index:index + self.MIN_DIST].max() < mx:  # pep8
+                if current_val < tmp_max:
+                    if tmp_max != np.Inf:
+                        if new_voltage_array[index:index
+                                             + self.MIN_DIST].max() < tmp_max:
                             # Found a valid peak
                             dump.append(True)
-                            max_peaks.append([max_pos, mx])
+                            max_peaks.append([max_pos, tmp_max])
                             # Setting flags to show that a peak was found
-                            mn = np.Inf
-                            mx = np.Inf
-                            if index + self.MIN_DIST >= length:
-                                # signal ends before window, no more valid peaks       # pep8
+                            tmp_min = np.Inf
+                            tmp_max = np.Inf
+                            if index + self.MIN_DIST >= len(new_voltage_array):
+                                # window exceeds signal length
                                 break
                             continue
                 # Now, look for local min - using this search
                 # to eliminate smaller peaks that aren't local peaks
                 # Prevents collecting the same max peak multiple times
-                if y > mn:
-                    if mn != -np.Inf:
+                if current_val > tmp_min:
+                    if tmp_min != -np.Inf:
                         # Found a min point
-                        if new_voltage_array[index:index + MIN_DIST].min() > mn:
+                        if new_voltage_array[index:index + self.MIN_DIST].min() > tmp_min:
                             dump.append(False)
                             # Setting flags to show that min point was found
-                            mn = -np.Inf
-                            mx = -np.Inf  # Triggering max peak finding again
-                            if index + MIN_DIST >= length:
-                                # signal ends before window, no more valid peaks    # pep8
+                            tmp_min = -np.Inf
+                            tmp_max = -np.Inf  # Triggering max peak finding again
+                            if index + self.MIN_DIST >= len(new_voltage_array):
+                                # window exceeds signal length
                                 break
 
-            total_peaks.append(max_peaks)
+            self.total_peaks.append(max_peaks)
             # Remove the false hit on the first value of the y_axis
             try:
                 if dump[0]:
