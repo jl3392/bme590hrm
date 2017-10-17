@@ -43,6 +43,10 @@ class Ecg:
             self.time_array = time
             self.voltage_array = voltage
             self.update_time = update_time
+            if isinstance(self.update_time, float):
+                self.update_time = int(self.update_time)
+            elif isinstance(self.update_time, str):
+                raise ValueError('Update time must be a number')
             self.brady_threshold = brady_threshold
             self.tachy_threshold = tachy_threshold
             self.mins = mins
@@ -58,10 +62,7 @@ class Ecg:
         Method that prepares data for get_max_peaks
         :return: none
         """
-        if isinstance(self.update_time, float):
-            self.update_time = int(self.update_time)
-        elif isinstance(self.update_time, str):
-            raise ValueError('Update time must be a number')
+
         total_time = self.time_array[-1] - self.time_array[1]
         num_groups = total_time / self.update_time  # inst HR groups
 
