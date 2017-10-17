@@ -33,6 +33,8 @@ class GetEcg:
 
         self.raw_bunches = []
         self.total_peaks = []
+        self.avg_hr = []
+        self.status = []
 
     def get_max_peak(self):
         """
@@ -142,28 +144,28 @@ class GetEcg:
 
     # Get number of groups based off of time
         if user_sec % self.update_time == 0:
-            group_num = int(user_sec/self.update_time)
+            groups = int(user_sec/self.update_time)
     # Taking an extra group if user input mins is between groups
         else:
-            group_num = int(math.floor(user_sec/self.update_time) + 1)
+            groups = int(math.floor(user_sec/self.update_time) + 1)
 
-        if len(self.raw_bunches) <= group_num:  # if user time is > raw data
+        if len(self.raw_bunches) <= groups:  # if user time is > raw data
             real_bunches = self.raw_bunches
         else:
-            real_bunches = self.raw_bunches[0:group_num]
+            real_bunches = self.raw_bunches[0:groups]
 
     # Calculating the avghr
-        avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
+        self.avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
 
     # Calculating brady-/tachycardia
-        if self.brady_threshold < avg_hr < self.tachy_threshold:
-            status = [2, 'You have a normal average heart rate '
-                         'over the period of {} minutes'.format(self.mins)]
-        elif avg_hr >= self.tachy_threshold:
-            status = [1, 'You have tachycardia over the '
-                         'period of {} minutes'.format(self.mins)]  # Tachy
-        elif avg_hr <= self.brady_threshold:
-            status = [0, 'You have bradycardia over '
-                         'the period of {} minutes'.format(self.mins)]  # Brady
+        if self.brady_threshold < self.avg_hr < self.tachy_threshold:
+            self.status = [2, 'You have a normal average heart rate '
+                              'over the period of {} minutes'.format(self.mins)]
+        elif self.avg_hr >= self.tachy_threshold:
+            self.status = [1, 'You have tachycardia over the '
+                              'period of {} minutes'.format(self.mins)]  # Tachy
+        elif self.avg_hr <= self.brady_threshold:
+            self.status = [0, 'You have bradycardia over the period of '
+                              '{} minutes'.format(self.mins)]  # Brady
 
-        return [status, avg_hr]
+
