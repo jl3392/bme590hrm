@@ -10,6 +10,7 @@ class Ecg:
     and clinical indication of brady-/tachycardia.
     """
     MIN_SEC = 60
+    MIN_DIST = 150
 
     def __init__(self, csv_file=None, update_time=5,
                  brady_threshold=60, tachy_threshold=100, mins=2):
@@ -50,7 +51,7 @@ class Ecg:
         :return: none
         """
         total_time = self.time_array[-1] - self.time_array[1]
-        groups = total_time / self.update_time  # inst HR groups
+        num_groups = total_time / self.update_time  # inst HR groups
 
         if groups < 1:
             raise ValueError("Update time is longer than signal length")
@@ -58,7 +59,7 @@ class Ecg:
         self.divided_time_array = np.array_split(self.time_array, groups)
         length = len(self.voltage_array)
 
-        if length % bunches != 0:  # ignore last group if not equal to others
+        if length % num_groups != 0:  # ignore last group if not equal to others
             np.delete(self.divided_voltage_array, -1)
 
         if isinstance(update_time,float):
@@ -94,14 +95,14 @@ class Ecg:
                 # Look for local max
                 if y < mx:
                     if mx != np.Inf:
-                        if new_voltage_array[index:index + min_dist].max() < mx:
+                        if new_voltage_array[index:index + MIN_DIST].max() < mx:
                             # Found a valid peak
                             dump.append(True)
                             max_peaks.append([max_pos, mx])
                             # Setting flags to show that a peak was found
                             mn = np.Inf
                             mx = np.Inf
-                            if index + min_dist >= length:
+                            if index + MIN_DIST >= length:
                                 # signal ends before end of window, no more valid peaks can be found
                                 break
                             continue
@@ -111,12 +112,12 @@ class Ecg:
                 if y > mn:
                     if mn != -np.Inf:
                         # Found a min point
-                        if new_voltage_array[index:index + min_dist].min() > mn:
+                        if new_voltage_array[index:index + MIN_DIST].min() > mn:
                             dump.append(False)
                             # Setting flags to show that min point was found
                             mn = -np.Inf
                             mx = -np.Inf # Triggering max peak finding again
-                            if index + min_dist >= length:
+                            if index + MIN_DIST >= length:
                                 # signal ends before end of window, no more valid peaks can be found
                                 break
 
