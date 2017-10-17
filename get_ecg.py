@@ -22,6 +22,7 @@ class Ecg:
         :param update_time: instantaneous HR update time in seconds
         :param brady_threshold: threshold for bradycardia in bpm
         :param tachy_threshold: threshold for tachycardia in bpm
+        :param mins: Specified averaging time over data set in minutes
         """
         if csv_file:
             data = pd.read_csv(csv_file, header=None)
@@ -210,4 +211,4 @@ class Ecg:
                       .format(self.raw_bunches))
         hr_info.write("\n Estimated Average HR is {} beats per minute.\n"
                       .format(self.avg_hr))
-        hr_info.write("\n{}\n".format(self.status))
+        hr_info.write("\n{}\n".format(self.status[1]))
