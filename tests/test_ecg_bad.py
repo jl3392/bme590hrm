@@ -19,7 +19,7 @@ class TestEcgBadData(unittest.TestCase):
         # Check if bad string in input was removed
         self.assertEqual(self.data.voltage_array[8],
                          self.data.voltage_array[7])
-        self.assertEqual(self.data.time_array[13],self.data.time_array[12])
+        self.assertEqual(self.data.time_array[13], self.data.time_array[12])
 
     def test_prep_data(self):
         self.assertEqual(len(self.data.divided_voltage_array), 1)
