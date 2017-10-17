@@ -15,8 +15,8 @@ class Ecg:
     def __init__(self, csv_file=None, update_time=5,
                  brady_threshold=60, tachy_threshold=100, mins=2):
         """
-        Constructor for ECG processing needs the input csv file to work on and
-        time for often to update the instantaneous HR
+        Constructor for ECG processing needs the input file to work on and
+        time for how often to update the instantaneous HR
 
         :param csv_file: the input file containing ECG data
         :param update_time: instantaneous HR update time in seconds
@@ -41,10 +41,11 @@ class Ecg:
         self.divided_voltage_array = np.array([])
         self.divided_time_array = np.array([])
         self.total_peaks = []
+        # self.length = length
         self.avg_hr = []
         self.status = []
         self.raw_bunches = []
-        
+
     def prep_data(self):
         """
         Method that prepares data for get_max_peaks
@@ -53,18 +54,18 @@ class Ecg:
         total_time = self.time_array[-1] - self.time_array[1]
         num_groups = total_time / self.update_time  # inst HR groups
 
-        if groups < 1:
+        if num_groups < 1:
             raise ValueError("Update time is longer than signal length")
-        self.divided_voltage_array = np.array_split(self.voltage_array, groups)
-        self.divided_time_array = np.array_split(self.time_array, groups)
+        self.divided_voltage_array = np.array_split(self.voltage_array, num_groups)  # pep8
+        self.divided_time_array = np.array_split(self.time_array, num_groups)
         length = len(self.voltage_array)
 
-        if length % num_groups != 0:  # ignore last group if not equal to others
+        if length % num_groups != 0:  # ignore last group if ~= to others
             np.delete(self.divided_voltage_array, -1)
 
-        if isinstance(update_time,float):
-            update_time =int(update_time)
-        elif isinstance(update_time, str):
+        if isinstance(self.update_time, float):
+            self.update_time = int(self.update_time)
+        elif isinstance(self.update_time, str):
             print('the update time should not be a string,please fix it.')
 
     def get_max_peak(self):
@@ -95,19 +96,19 @@ class Ecg:
                 # Look for local max
                 if y < mx:
                     if mx != np.Inf:
-                        if new_voltage_array[index:index + MIN_DIST].max() < mx:
+                        if new_voltage_array[index:index + self.MIN_DIST].max() < mx:  # pep8
                             # Found a valid peak
                             dump.append(True)
                             max_peaks.append([max_pos, mx])
                             # Setting flags to show that a peak was found
                             mn = np.Inf
                             mx = np.Inf
-                            if index + MIN_DIST >= length:
-                                # signal ends before end of window, no more valid peaks can be found
+                            if index + self.MIN_DIST >= length:
+                                # signal ends before window, no more valid peaks       # pep8
                                 break
                             continue
-                # Now, look for local min - using this search to eliminate smaller peaks that
-                # are not local peaks
+                # Now, look for local min - using this search
+                # to eliminate smaller peaks that aren't local peaks
                 # Prevents collecting the same max peak multiple times
                 if y > mn:
                     if mn != -np.Inf:
@@ -116,9 +117,9 @@ class Ecg:
                             dump.append(False)
                             # Setting flags to show that min point was found
                             mn = -np.Inf
-                            mx = -np.Inf # Triggering max peak finding again
+                            mx = -np.Inf  # Triggering max peak finding again
                             if index + MIN_DIST >= length:
-                                # signal ends before end of window, no more valid peaks can be found
+                                # signal ends before window, no more valid peaks    # pep8
                                 break
 
             total_peaks.append(max_peaks)
@@ -130,7 +131,6 @@ class Ecg:
             except IndexError:
                     # no peaks were found
                     print("No peaks were found")
-           
 
     def get_inst_hr(self):
         """
@@ -162,7 +162,7 @@ class Ecg:
             :return status: Brady or tachycardia
         """
 
-        user_sec = mins * self.MIN_SEC
+        user_sec = self.mins * self.MIN_SEC
 
     # Get number of groups based off of time
         if user_sec % self.update_time == 0:
@@ -182,12 +182,10 @@ class Ecg:
     # Calculating brady-/tachycardia
         if self.brady_threshold < self.avg_hr < self.tachy_threshold:
             self.status = [2, 'You have a normal average heart rate '
-                              'over the period of {} minutes'.format(self.mins)]
+                              'over a period of {} minutes'.format(self.mins)]
         elif self.avg_hr >= self.tachy_threshold:
-            self.status = [1, 'You have tachycardia over the '
-                              'period of {} minutes'.format(self.mins)]  # Tachy
+            self.status = [1, 'You have tachycardia over the period of '
+                              '{} minutes'.format(self.mins)]  # Tachy
         elif self.avg_hr <= self.brady_threshold:
             self.status = [0, 'You have bradycardia over the period of '
                               '{} minutes'.format(self.mins)]  # Brady
-
-
