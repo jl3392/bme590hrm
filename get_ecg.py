@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import math
 
 
@@ -22,10 +23,16 @@ class GetEcg:
         :param tachy_threshold: threshold for tachycardia
         """
         if csv_file is not None:
-            data = np.loadtxt(csv_file, dtype='float', delimiter=",",
-                              skiprows=0)
-            self.time_array = np.array(data[:, 0])
-            self.voltage_array = np.array(data[:, 1])
+            data = pd.read_csv(csv_file, header=None)
+            data.columns = ['time', 'voltage']
+            voltage = pd.to_numeric(data.voltage, errors='coerce')
+            time = pd.to_numeric(data.time, errors='coerce')
+            voltage = voltage.fillna(methood='pad')
+            time = time.fillna(method='pad')
+            voltage = voltage.as_matrix()
+            time = time.as_matrix()
+            self.time_array = time
+            self.voltage_array = voltage
             self.update_time = update_time
             self.brady_threshold = brady_threshold
             self.tachy_threshold = tachy_threshold
