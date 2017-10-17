@@ -28,10 +28,12 @@ class Ecg:
             data.columns = ['time', 'voltage']
             voltage = pd.to_numeric(data.voltage, errors='coerce')
             time = pd.to_numeric(data.time, errors='coerce')
-            voltage = voltage.fillna(methood='pad')
+            voltage = voltage.fillna(method='pad')
             time = time.fillna(method='pad')
             voltage = voltage.as_matrix()
             time = time.as_matrix()
+            last_slash = str(csv_file).rfind('\\')
+            self.name = csv_file.partition(csv_file[last_slash])[-1].rpartition(".")[0]
             self.time_array = time
             self.voltage_array = voltage
             self.update_time = update_time
@@ -198,9 +200,9 @@ class Ecg:
         :rtype: txt
         """
 
-        HRinfo = open('{}_HR_Information.txt'.format(self.csv_file), 'w')
-        HRinfo.write("Estimated Instaneous HR is {} beats per minute.\n"
+        hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
+        hr_info.write("Estimated Instaneous HR is {} beats per minute.\n"
                      .format(self.raw_bunches))
-        HRinfo.write("\n Estimated Average HR is {} beats per.\n"
+        hr_info.write("\n Estimated Average HR is {} beats per.\n"
                      .format(self.avg_hr))
-        HRinfo.write("\n{}\n".format(self.status))
+        hr_info.write("\n{}\n".format(self.status))
