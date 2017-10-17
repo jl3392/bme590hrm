@@ -48,8 +48,20 @@ class Ecg:
             elif isinstance(self.update_time, str):
                 raise ValueError('Update time must be a number')
             self.brady_threshold = brady_threshold
+            if isinstance(self.brady_threshold, float):
+                self.update_time = int(self.brady_threshold)
+            elif isinstance(self.brady_threshold, str):
+                raise ValueError('Thresholds cannot be strings or floats')
             self.tachy_threshold = tachy_threshold
+            if isinstance(self.tachy_threshold, float):
+                self.update_time = int(self.tachy_threshold)
+            elif isinstance(self.tachy_threshold, str):
+                raise ValueError('Thresholds cannot be strings or floats')
             self.mins = mins
+            if isinstance(self.mins, float):
+                self.update_time = int(self.mins)
+            elif isinstance(self.mins, str):
+                raise ValueError('Averaging window must be a number in s')
         self.divided_voltage_array = np.array([])
         self.divided_time_array = np.array([])
         self.total_peaks = []
