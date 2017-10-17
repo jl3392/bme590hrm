@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import math
 
 
@@ -22,17 +23,20 @@ class Ecg:
         :param tachy_threshold: threshold for tachycardia in bpm
         """
         if csv_file:
-            data = np.loadtxt(csv_file, dtype='float', delimiter=",",
-                              skiprows=0)
-            self.time_array = np.array(data[:, 0])
-            self.voltage_array = np.array(data[:, 1])
+            data = pd.read_csv(csv_file, header=None)
+            data.columns = ['time', 'voltage']
+            voltage = pd.to_numeric(data.voltage, errors='coerce')
+            time = pd.to_numeric(data.time, errors='coerce')
+            voltage = voltage.fillna(methood='pad')
+            time = time.fillna(method='pad')
+            voltage = voltage.as_matrix()
+            time = time.as_matrix()
+            self.time_array = time
+            self.voltage_array = voltage
             self.update_time = update_time
             self.brady_threshold = brady_threshold
             self.tachy_threshold = tachy_threshold
             self.mins = mins
-            
-       
-        
         self.divided_voltage_array = np.array([])
         self.divided_time_array = np.array([])
         self.total_peaks = []
@@ -56,6 +60,11 @@ class Ecg:
 
         if length % bunches != 0:  # ignore last group if not equal to others
             np.delete(self.divided_voltage_array, -1)
+
+        if isinstance(update_time,float):
+            update_time =int(update_time)
+        elif isinstance(update_time, str):
+            print('the update time should not be a string,please fix it.')
 
     def get_max_peak(self):
         """
