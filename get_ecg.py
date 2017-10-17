@@ -2,13 +2,13 @@ import numpy as np
 import math
 
 
-class GetEcg:
+class Ecg:
 
     """
     Creating this class to convert raw ECG data of all types into HR data
     and clinical indication of brady-/tachycardia.
     """
-    min2sec = 60
+    MIN_SEC = 60
 
     def __init__(self, csv_file=None, update_time=5,
                  brady_threshold=60, tachy_threshold=100, mins=2):
@@ -17,11 +17,11 @@ class GetEcg:
         time for often to update the instantaneous HR
 
         :param csv_file: the input file containing ECG data
-        :param update_time: instantaneous HR update time
-        :param brady_threshold: threshold for bradycardia
-        :param tachy_threshold: threshold for tachycardia
+        :param update_time: instantaneous HR update time in seconds
+        :param brady_threshold: threshold for bradycardia in bpm
+        :param tachy_threshold: threshold for tachycardia in bpm
         """
-        if csv_file is not None:
+        if csv_file:
             data = np.loadtxt(csv_file, dtype='float', delimiter=",",
                               skiprows=0)
             self.time_array = np.array(data[:, 0])
@@ -30,74 +30,88 @@ class GetEcg:
             self.brady_threshold = brady_threshold
             self.tachy_threshold = tachy_threshold
             self.mins = mins
-
-        self.raw_bunches = []
+            
+       
+        
+        self.divided_voltage_array = np.array([])
+        self.divided_time_array = np.array([])
         self.total_peaks = []
         self.avg_hr = []
         self.status = []
+        self.raw_bunches = []
+        
+    def prep_data(self):
+        """
+        Method that prepares data for get_max_peaks
+        :return: none
+        """
+        total_time = self.time_array[-1] - self.time_array[1]
+        groups = total_time / self.update_time  # inst HR groups
+
+        if groups < 1:
+            raise ValueError("Update time is longer than signal length")
+        self.divided_voltage_array = np.array_split(self.voltage_array, groups)
+        self.divided_time_array = np.array_split(self.time_array, groups)
+        length = len(self.voltage_array)
+
+        if length % bunches != 0:  # ignore last group if not equal to others
+            np.delete(self.divided_voltage_array, -1)
 
     def get_max_peak(self):
         """
-           Function that will find local maximum of an array i.e peaks
+           Method that will find local maximum of an array i.e peaks
 
               :return total_peaks: list of all peaks detected, arranged
                into chunks based on update_time
               :rtype: list
 
            """
-        min_dist = 150
-        if isinstance(self.update_time, float):
-            self.update_time = int(self.update_time)
-        total_time = self.time_array[-1] - self.time_array[1]
-        bunches = total_time/self.update_time
-
-        if total_time / self.update_time < 1:
-            raise ValueError("Update time is longer than signal length")
-        divided_voltage_array = np.array_split(self.voltage_array, bunches)
-        divided_time_array = np.array_split(self.time_array, bunches)
-        length = len(self.voltage_array)
-
-        if length % bunches != 0:
-            np.delete(divided_voltage_array, -1)
-        for i in range(len(divided_voltage_array)):
+        for i in range(len(self.divided_voltage_array)):
             dump = []
-            new_time_array = divided_time_array[i]
-            new_voltage_array = divided_voltage_array[i]
+            new_time_array = self.divided_time_array[i]
+            new_voltage_array = self.divided_voltage_array[i]
             max_peaks = []
 
-            mx, mn = -np.Inf, np.Inf
+            mx, mn = -np.Inf, np.Inf  # tmp var to hold max, min
 
             for index, (x, y) in enumerate(zip(new_time_array,
                                                new_voltage_array)):
-                if y > mx:
-                    mx = y
-                    mxpos = x
+                if y > mx:  # if current value is > tmp
+                    mx = y  # tmp = current
+                    max_pos = x
                 if y < mn:
                     mn = y
 
-                # Looking for max
-                if y < mx and mx != np.Inf:
-                    # Maxima peak candidate found
-                    if new_voltage_array[index:index + min_dist].max() < mx:
-                        max_peaks.append([mxpos, mx])
-                        dump.append(True)
-                        # set algorithm to only find minima now
-                        mn = np.Inf
-                        mx = np.Inf
-                        if index + min_dist >= length:
-                            # end is within lookahead no more peaks
-                            break
-                        continue
+                # Look for local max
+                if y < mx:
+                    if mx != np.Inf:
+                        if new_voltage_array[index:index + min_dist].max() < mx:
+                            # Found a valid peak
+                            dump.append(True)
+                            max_peaks.append([max_pos, mx])
+                            # Setting flags to show that a peak was found
+                            mn = np.Inf
+                            mx = np.Inf
+                            if index + min_dist >= length:
+                                # signal ends before end of window, no more valid peaks can be found
+                                break
+                            continue
+                # Now, look for local min - using this search to eliminate smaller peaks that
+                # are not local peaks
+                # Prevents collecting the same max peak multiple times
+                if y > mn:
+                    if mn != -np.Inf:
+                        # Found a min point
+                        if new_voltage_array[index:index + min_dist].min() > mn:
+                            dump.append(False)
+                            # Setting flags to show that min point was found
+                            mn = -np.Inf
+                            mx = -np.Inf # Triggering max peak finding again
+                            if index + min_dist >= length:
+                                # signal ends before end of window, no more valid peaks can be found
+                                break
 
-                if y > mn and mn != -np.Inf:
-                    if new_voltage_array[index:index + min_dist].min() > mn:
-                        dump.append(False)
-                        mn = -np.Inf
-                        mx = -np.Inf
-                        if index + min_dist >= length:
-                            break
-
-            self.total_peaks.append(max_peaks)
+            total_peaks.append(max_peaks)
             # Remove the false hit on the first value of the y_axis
             try:
                 if dump[0]:
@@ -106,8 +120,7 @@ class GetEcg:
             except IndexError:
                     # no peaks were found
                     print("No peaks were found")
-
-        return self.total_peaks
+           
 
     def get_inst_hr(self):
         """
@@ -127,7 +140,6 @@ class GetEcg:
         new_array = np.array(num_of_peaks)
         inst_heart_rate = new_array / self.update_time
         self.raw_bunches = inst_heart_rate * 60
-        return self.raw_bunches
 
     def get_avghr(self):
         """ returns avghr
@@ -140,7 +152,7 @@ class GetEcg:
             :return status: Brady or tachycardia
         """
 
-        user_sec = self.mins * self.min2sec
+        user_sec = mins * self.MIN_SEC
 
     # Get number of groups based off of time
         if user_sec % self.update_time == 0:
