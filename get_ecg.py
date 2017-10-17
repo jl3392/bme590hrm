@@ -28,7 +28,7 @@ class Ecg:
             data.columns = ['time', 'voltage']
             voltage = pd.to_numeric(data.voltage, errors='coerce')
             time = pd.to_numeric(data.time, errors='coerce')
-            voltage = voltage.fillna(methood='pad')
+            voltage = voltage.fillna(method='pad')
             time = time.fillna(method='pad')
             voltage = voltage.as_matrix()
             time = time.as_matrix()
