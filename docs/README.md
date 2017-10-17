@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jl3392/bme590hrm.png?branch=master)](https://travis-ci.org/jl3392/bme590hrm)
+[![Build Status](https://travis-ci.org/jl3392/bme590hrm.png?branch=master_hw2)](https://travis-ci.org/jl3392/bme590hrm)
 
 Class Based Heart Rate Monitor
 ======================
