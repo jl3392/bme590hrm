@@ -3,26 +3,26 @@ import pandas as pd
 import math
 
 
-class GetEcg:
+class Ecg:
 
     """
     Creating this class to convert raw ECG data of all types into HR data
     and clinical indication of brady-/tachycardia.
     """
-    min2sec = 60
+    MIN_SEC = 60
 
     def __init__(self, csv_file=None, update_time=5,
-                 brady_threshold=60, tachy_threshold=100):
+                 brady_threshold=60, tachy_threshold=100, mins=2):
         """
         Constructor for ECG processing needs the input csv file to work on and
         time for often to update the instantaneous HR
 
         :param csv_file: the input file containing ECG data
-        :param update_time: instantaneous HR update time
-        :param brady_threshold: threshold for bradycardia
-        :param tachy_threshold: threshold for tachycardia
+        :param update_time: instantaneous HR update time in seconds
+        :param brady_threshold: threshold for bradycardia in bpm
+        :param tachy_threshold: threshold for tachycardia in bpm
         """
-        if csv_file is not None:
+        if csv_file:
             data = pd.read_csv(csv_file, header=None)
             data.columns = ['time', 'voltage']
             voltage = pd.to_numeric(data.voltage, errors='coerce')
@@ -36,9 +36,30 @@ class GetEcg:
             self.update_time = update_time
             self.brady_threshold = brady_threshold
             self.tachy_threshold = tachy_threshold
-
-        self.raw_bunches = []
+            self.mins = mins
+        self.divided_voltage_array = np.array([])
+        self.divided_time_array = np.array([])
         self.total_peaks = []
+        self.avg_hr = []
+        self.status = []
+        self.raw_bunches = []
+        
+    def prep_data(self):
+        """
+        Method that prepares data for get_max_peaks
+        :return: none
+        """
+        total_time = self.time_array[-1] - self.time_array[1]
+        groups = total_time / self.update_time  # inst HR groups
+
+        if groups < 1:
+            raise ValueError("Update time is longer than signal length")
+        self.divided_voltage_array = np.array_split(self.voltage_array, groups)
+        self.divided_time_array = np.array_split(self.time_array, groups)
+        length = len(self.voltage_array)
+
+        if length % bunches != 0:  # ignore last group if not equal to others
+            np.delete(self.divided_voltage_array, -1)
 
         if isinstance(update_time,float):
             update_time =int(update_time)
@@ -47,65 +68,59 @@ class GetEcg:
 
     def get_max_peak(self):
         """
-           Function that will find local maximum of an array i.e peaks
+           Method that will find local maximum of an array i.e peaks
 
               :return total_peaks: list of all peaks detected, arranged
                into chunks based on update_time
               :rtype: list
 
            """
-        min_dist = 150
-        self.update_time = int(self.update_time)
-        total_time = self.time_array[-1] - self.time_array[1]
-        bunches = total_time/self.update_time
-
-        if total_time / self.update_time < 1:
-            raise ValueError("Update time is longer than signal length")
-        divided_voltage_array = np.array_split(self.voltage_array, bunches)
-        divided_time_array = np.array_split(self.time_array, bunches)
-        length = len(self.voltage_array)
-
-        if length % bunches != 0:
-            np.delete(divided_voltage_array, -1)
-        for i in range(len(divided_voltage_array)):
+        for i in range(len(self.divided_voltage_array)):
             dump = []
-            new_time_array = divided_time_array[i]
-            new_voltage_array = divided_voltage_array[i]
+            new_time_array = self.divided_time_array[i]
+            new_voltage_array = self.divided_voltage_array[i]
             max_peaks = []
 
-            mx, mn = -np.Inf, np.Inf
+            mx, mn = -np.Inf, np.Inf  # tmp var to hold max, min
 
             for index, (x, y) in enumerate(zip(new_time_array,
                                                new_voltage_array)):
-                if y > mx:
-                    mx = y
-                    mxpos = x
+                if y > mx:  # if current value is > tmp
+                    mx = y  # tmp = current
+                    max_pos = x
                 if y < mn:
                     mn = y
 
-                # Looking for max
-                if y < mx and mx != np.Inf:
-                    # Maxima peak candidate found
-                    if new_voltage_array[index:index + min_dist].max() < mx:
-                        max_peaks.append([mxpos, mx])
-                        dump.append(True)
-                        # set algorithm to only find minima now
-                        mn = np.Inf
-                        mx = np.Inf
-                        if index + min_dist >= length:
-                            # end is within lookahead no more peaks
-                            break
-                        continue
+                # Look for local max
+                if y < mx:
+                    if mx != np.Inf:
+                        if new_voltage_array[index:index + min_dist].max() < mx:
+                            # Found a valid peak
+                            dump.append(True)
+                            max_peaks.append([max_pos, mx])
+                            # Setting flags to show that a peak was found
+                            mn = np.Inf
+                            mx = np.Inf
+                            if index + min_dist >= length:
+                                # signal ends before end of window, no more valid peaks can be found
+                                break
+                            continue
+                # Now, look for local min - using this search to eliminate smaller peaks that
+                # are not local peaks
+                # Prevents collecting the same max peak multiple times
+                if y > mn:
+                    if mn != -np.Inf:
+                        # Found a min point
+                        if new_voltage_array[index:index + min_dist].min() > mn:
+                            dump.append(False)
+                            # Setting flags to show that min point was found
+                            mn = -np.Inf
+                            mx = -np.Inf # Triggering max peak finding again
+                            if index + min_dist >= length:
+                                # signal ends before end of window, no more valid peaks can be found
+                                break
 
-                if y > mn and mn != -np.Inf:
-                    if new_voltage_array[index:index + min_dist].min() > mn:
-                        dump.append(False)
-                        mn = -np.Inf
-                        mx = -np.Inf
-                        if index + min_dist >= length:
-                            break
-
-            self.total_peaks.append(max_peaks)
+            total_peaks.append(max_peaks)
             # Remove the false hit on the first value of the y_axis
             try:
                 if dump[0]:
@@ -114,8 +129,7 @@ class GetEcg:
             except IndexError:
                     # no peaks were found
                     print("No peaks were found")
-
-        return self.total_peaks
+           
 
     def get_inst_hr(self):
         """
@@ -135,50 +149,44 @@ class GetEcg:
         new_array = np.array(num_of_peaks)
         inst_heart_rate = new_array / self.update_time
         self.raw_bunches = inst_heart_rate * 60
-        return self.raw_bunches
 
     def get_avghr(self):
         """ returns avghr
 
-            Function gets avghr over user-specified minutes window.
-            Also gives clinical indication of tachy/bradycardia
+            Method gets avghr over user-specified minutes window.
+            Also gives clinical indication of tachy/bradycardia,
+            based on threshold values
 
             :return avg_hr: Avg hr
             :return status: Brady or tachycardia
         """
-        mins = float(input('Please specify a time (in min) for averaging.'))
-        if isinstance(mins, float) is True or isinstance(mins, int) is True:
-            mins = mins
-        elif isinstance(mins, complex) is True:
-            raise ValueError('Please use real numbers.')
 
-        user_sec = mins * self.min2sec
+        user_sec = mins * self.MIN_SEC
 
-    # Must have number of groups be whole
+    # Get number of groups based off of time
         if user_sec % self.update_time == 0:
-            group_num = int(user_sec/self.update_time)
-        # Taking an additional groups if user input is between groups
+            groups = int(user_sec/self.update_time)
+    # Taking an extra group if user input mins is between groups
         else:
-            group_num = int(math.floor(user_sec/self.update_time) + 1)
+            groups = int(math.floor(user_sec/self.update_time) + 1)
 
-        # Take Niranjana's grouping output and truncating to fit user input
-        if len(self.raw_bunches) <= group_num:  # if user time is > raw data
+        if len(self.raw_bunches) <= groups:  # if user time is > raw data
             real_bunches = self.raw_bunches
         else:
-            real_bunches = self.raw_bunches[0:group_num]
+            real_bunches = self.raw_bunches[0:groups]
 
     # Calculating the avghr
-        avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
+        self.avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
 
     # Calculating brady-/tachycardia
-        if self.brady_threshold < avg_hr < self.tachy_threshold:
-            status = [2, 'You have a normal average heart rate '
-                         'over the period of {} minutes'.format(mins)]
-        elif avg_hr >= self.tachy_threshold:
-            status = [1, 'You have tachycardia over the '
-                         'period of {} minutes'.format(mins)]  # Tachy
-        elif avg_hr <= self.brady_threshold:
-            status = [0, 'You have bradycardia over '
-                         'the period of {} minutes'.format(mins)]  # Brady
+        if self.brady_threshold < self.avg_hr < self.tachy_threshold:
+            self.status = [2, 'You have a normal average heart rate '
+                              'over the period of {} minutes'.format(self.mins)]
+        elif self.avg_hr >= self.tachy_threshold:
+            self.status = [1, 'You have tachycardia over the '
+                              'period of {} minutes'.format(self.mins)]  # Tachy
+        elif self.avg_hr <= self.brady_threshold:
+            self.status = [0, 'You have bradycardia over the period of '
+                              '{} minutes'.format(self.mins)]  # Brady
 
-        return [status, avg_hr]
+
