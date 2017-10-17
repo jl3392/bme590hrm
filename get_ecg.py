@@ -11,7 +11,7 @@ class Ecg:
     MIN_SEC = 60
 
     def __init__(self, csv_file=None, update_time=5,
-                 brady_threshold=60, tachy_threshold=100):
+                 brady_threshold=60, tachy_threshold=100, mins=2):
         """
         Constructor for ECG processing needs the input csv file to work on and
         time for often to update the instantaneous HR
@@ -29,12 +29,17 @@ class Ecg:
             self.update_time = update_time
             self.brady_threshold = brady_threshold
             self.tachy_threshold = tachy_threshold
-
-        self.raw_bunches = raw_bunches
-        self.total_peaks = total_peaks
+            self.mins = mins
+            
+       
+        
         self.divided_voltage_array = np.array([])
         self.divided_time_array = np.array([])
-
+        self.total_peaks = []
+        self.avg_hr = []
+        self.status = []
+        self.raw_bunches = []
+        
     def prep_data(self):
         """
         Method that prepares data for get_max_peaks
@@ -61,7 +66,6 @@ class Ecg:
               :rtype: list
 
            """
-        total_peaks = []
         for i in range(len(self.divided_voltage_array)):
             dump = []
             new_time_array = self.divided_time_array[i]
@@ -116,7 +120,7 @@ class Ecg:
             except IndexError:
                     # no peaks were found
                     print("No peaks were found")
-            return total_peaks
+           
 
     def get_inst_hr(self):
         """
@@ -136,50 +140,44 @@ class Ecg:
         new_array = np.array(num_of_peaks)
         inst_heart_rate = new_array / self.update_time
         self.raw_bunches = inst_heart_rate * 60
-        return self.raw_bunches
 
     def get_avghr(self):
         """ returns avghr
 
-            Function gets avghr over user-specified minutes window.
-            Also gives clinical indication of tachy/bradycardia
+            Method gets avghr over user-specified minutes window.
+            Also gives clinical indication of tachy/bradycardia,
+            based on threshold values
 
             :return avg_hr: Avg hr
             :return status: Brady or tachycardia
         """
-        mins = float(input('Please specify a time (in min) for averaging.'))
-        if isinstance(mins, float) is True or isinstance(mins, int) is True:
-            mins = mins
-        elif isinstance(mins, complex) is True:
-            raise ValueError('Please use real numbers.')
 
         user_sec = mins * self.MIN_SEC
 
-    # Must have number of groups be whole
+    # Get number of groups based off of time
         if user_sec % self.update_time == 0:
-            group_num = int(user_sec/self.update_time)
-        # Taking an additional groups if user input is between groups
+            groups = int(user_sec/self.update_time)
+    # Taking an extra group if user input mins is between groups
         else:
-            group_num = int(math.floor(user_sec/self.update_time) + 1)
+            groups = int(math.floor(user_sec/self.update_time) + 1)
 
-        # Take Niranjana's grouping output and truncating to fit user input
-        if len(self.raw_bunches) <= group_num:  # if user time is > raw data
+        if len(self.raw_bunches) <= groups:  # if user time is > raw data
             real_bunches = self.raw_bunches
         else:
-            real_bunches = self.raw_bunches[0:group_num]
+            real_bunches = self.raw_bunches[0:groups]
 
     # Calculating the avghr
-        avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
+        self.avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
 
     # Calculating brady-/tachycardia
-        if self.brady_threshold < avg_hr < self.tachy_threshold:
-            status = [2, 'You have a normal average heart rate '
-                         'over the period of {} minutes'.format(mins)]
-        elif avg_hr >= self.tachy_threshold:
-            status = [1, 'You have tachycardia over the '
-                         'period of {} minutes'.format(mins)]  # Tachy
-        elif avg_hr <= self.brady_threshold:
-            status = [0, 'You have bradycardia over '
-                         'the period of {} minutes'.format(mins)]  # Brady
+        if self.brady_threshold < self.avg_hr < self.tachy_threshold:
+            self.status = [2, 'You have a normal average heart rate '
+                              'over the period of {} minutes'.format(self.mins)]
+        elif self.avg_hr >= self.tachy_threshold:
+            self.status = [1, 'You have tachycardia over the '
+                              'period of {} minutes'.format(self.mins)]  # Tachy
+        elif self.avg_hr <= self.brady_threshold:
+            self.status = [0, 'You have bradycardia over the period of '
+                              '{} minutes'.format(self.mins)]  # Brady
 
-        return [status, avg_hr]
+
