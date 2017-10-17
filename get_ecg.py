@@ -32,7 +32,8 @@ class Ecg:
             time = time.fillna(method='pad')
             voltage = voltage.as_matrix()
             time = time.as_matrix()
-            self.name = csv_file.partition('test_data\\')[-1].rpartition(".")[0]
+            last_slash = str(csv_file).rfind('\\')
+            self.name = csv_file.partition(csv_file[last_slash])[-1].rpartition(".")[0]
             self.time_array = time
             self.voltage_array = voltage
             self.update_time = update_time
