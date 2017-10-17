@@ -32,8 +32,13 @@ class Ecg:
             time = time.fillna(method='pad')
             voltage = voltage.as_matrix()
             time = time.as_matrix()
-            last_slash = str(csv_file).rfind('\\')
-            self.name = csv_file.partition(csv_file[last_slash])[-1].rpartition(".")[0]
+            if csv_file.rfind('\\'):
+                last_s = csv_file.rfind('\\')
+                self.name = csv_file.rpartition(
+                    csv_file[last_s])[-1].rpartition(".")[0]
+            if not self.name:
+                self.name = csv_file.rpartition(
+                    csv_file[csv_file.rfind('/')])[-1].rpartition(".")[0]
             self.time_array = time
             self.voltage_array = voltage
             self.update_time = update_time
@@ -201,7 +206,7 @@ class Ecg:
         """
 
         hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
-        hr_info.write("Estimated Instaneous HR is {} beats per minute.\n"
+        hr_info.write("Estimated Instantaneous HR is {} beats per minute.\n"
                       .format(self.raw_bunches))
         hr_info.write("\n Estimated Average HR is {} beats per minute.\n"
                       .format(self.avg_hr))
