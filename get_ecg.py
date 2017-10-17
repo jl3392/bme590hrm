@@ -41,10 +41,9 @@ class Ecg:
         self.divided_voltage_array = np.array([])
         self.divided_time_array = np.array([])
         self.total_peaks = []
-        # self.length = length
-        self.avg_hr = []
-        self.status = []
-        self.raw_bunches = []
+        self.avg_hr = None
+        self.status = None
+        self.raw_bunches = []  # This is a list
 
     def prep_data(self):
         """
@@ -85,8 +84,8 @@ class Ecg:
 
             tmp_max, tmp_min = -np.Inf, np.Inf  # tmp var to hold max, min
 
-            for index, (pos,curr_val) in enumerate(zip(new_time_array,
-                                                          new_voltage_array)):
+            for index, (pos, curr_val) in enumerate(zip(new_time_array,
+                                                        new_voltage_array)):
                 if curr_val > tmp_max:  # if current value is > tmp
                     max_pos = pos
                     tmp_max = curr_val  # tmp = current
@@ -97,8 +96,8 @@ class Ecg:
                 # Look for local max
                 if curr_val < tmp_max:
                     if tmp_max != np.Inf:
-                        if new_voltage_array[index:index
-                                             + self.MIN_DIST].max() < tmp_max:
+                        if new_voltage_array[index:index +
+                                             self.MIN_DIST].max() < tmp_max:
                             # Found a valid peak
                             dump.append(True)
                             max_peaks.append([max_pos, tmp_max])
@@ -115,17 +114,18 @@ class Ecg:
                 if curr_val > tmp_min:
                     if tmp_min != -np.Inf:
                         # Found a min point
-                        if new_voltage_array[index:index + self.MIN_DIST].min() > tmp_min:
+                        if new_voltage_array[index:index +
+                                             self.MIN_DIST].min() > tmp_min:
                             dump.append(False)
                             # Setting flags to show that min point was found
                             tmp_min = -np.Inf
-                            tmp_max = -np.Inf  # Triggering max peak finding again
+                            tmp_max = -np.Inf  # Trigger max peak finding
                             if index + self.MIN_DIST >= len(new_voltage_array):
                                 # window exceeds signal length
                                 break
 
             self.total_peaks.append(max_peaks)
-            # Remove the false hit on the first value 
+            # Remove the false hit on the first value
             try:
                 if dump[0]:
                     max_peaks.pop(0)
