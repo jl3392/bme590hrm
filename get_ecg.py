@@ -85,17 +85,17 @@ class Ecg:
 
             tmp_max, tmp_min = -np.Inf, np.Inf  # tmp var to hold max, min
 
-            for index, (x, current_val) in enumerate(zip(new_time_array,
-                                                         new_voltage_array)):
-                if current_val > tmp_max:  # if current value is > tmp
-                    max_pos = x
-                    tmp_max = current_val  # tmp = current
+            for index, (pos,curr_val) in enumerate(zip(new_time_array,
+                                                          new_voltage_array)):
+                if curr_val > tmp_max:  # if current value is > tmp
+                    max_pos = pos
+                    tmp_max = curr_val  # tmp = current
 
-                if current_val < tmp_min:
-                    tmp_min = current_val
+                if curr_val < tmp_min:
+                    tmp_min = curr_val
 
                 # Look for local max
-                if current_val < tmp_max:
+                if curr_val < tmp_max:
                     if tmp_max != np.Inf:
                         if new_voltage_array[index:index
                                              + self.MIN_DIST].max() < tmp_max:
@@ -112,7 +112,7 @@ class Ecg:
                 # Now, look for local min - using this search
                 # to eliminate smaller peaks that aren't local peaks
                 # Prevents collecting the same max peak multiple times
-                if current_val > tmp_min:
+                if curr_val > tmp_min:
                     if tmp_min != -np.Inf:
                         # Found a min point
                         if new_voltage_array[index:index + self.MIN_DIST].min() > tmp_min:
@@ -125,7 +125,7 @@ class Ecg:
                                 break
 
             self.total_peaks.append(max_peaks)
-            # Remove the false hit on the first value of the y_axis
+            # Remove the false hit on the first value 
             try:
                 if dump[0]:
                     max_peaks.pop(0)
