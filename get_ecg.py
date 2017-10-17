@@ -202,7 +202,7 @@ class Ecg:
 
         hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
         hr_info.write("Estimated Instaneous HR is {} beats per minute.\n"
-                     .format(self.raw_bunches))
-        hr_info.write("\n Estimated Average HR is {} beats per.\n"
-                     .format(self.avg_hr))
+                      .format(self.raw_bunches))
+        hr_info.write("\n Estimated Average HR is {} beats per minute.\n"
+                      .format(self.avg_hr))
         hr_info.write("\n{}\n".format(self.status))
