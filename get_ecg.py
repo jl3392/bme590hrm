@@ -85,8 +85,8 @@ class Ecg:
 
             tmp_max, tmp_min = -np.Inf, np.Inf  # tmp var to hold max, min
 
-            for index, (pos,curr_val) in enumerate(zip(new_time_array,
-                                                          new_voltage_array)):
+            for index, (pos, curr_val) in enumerate(zip(new_time_array,
+                                                        new_voltage_array)):
                 if curr_val > tmp_max:  # if current value is > tmp
                     max_pos = pos
                     tmp_max = curr_val  # tmp = current
@@ -125,7 +125,7 @@ class Ecg:
                                 break
 
             self.total_peaks.append(max_peaks)
-            # Remove the false hit on the first value 
+            # Remove the false hit on the first value
             try:
                 if dump[0]:
                     max_peaks.pop(0)
