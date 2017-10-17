@@ -191,3 +191,16 @@ class Ecg:
         elif self.avg_hr <= self.brady_threshold:
             self.status = [0, 'You have bradycardia over the period of '
                               '{} minutes'.format(self.mins)]  # Brady
+
+    def get_output(self):
+        """
+        :return the output information in txt
+        :rtype: txt
+        """
+
+        HRinfo = open('{}_HR_Information.txt'.format(self.csv_file), 'w')
+        HRinfo.write("Estimated Instaneous HR is {} beats per minute.\n"
+                     .format(self.raw_bunches))
+        HRinfo.write("\n Estimated Average HR is {} beats per.\n"
+                     .format(self.avg_hr))
+        HRinfo.write("\n{}\n".format(self.status))
