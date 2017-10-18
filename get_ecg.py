@@ -15,7 +15,7 @@ class Ecg:
     def __init__(self, csv_file=None, update_time=5,
                  brady_threshold=60, tachy_threshold=100, mins=2):
         """
-        Constructor for ECG processing needs the input file to work on and
+        Constructor for ECG processing needs the input file(s) to work on and
         time for how often to update the instantaneous HR
 
         :param csv_file: the input file containing ECG data
@@ -181,8 +181,10 @@ class Ecg:
             Also gives clinical indication of tachy/bradycardia,
             based on threshold values
 
-            :return avg_hr: Avg hr
+            :return avg_hr: Avg hr in BPM
             :return status: Brady or tachycardia
+            :rtype avg_hr: float
+            :rtype status: list
         """
 
         user_sec = self.mins * self.MIN_SEC
