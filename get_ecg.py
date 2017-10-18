@@ -23,6 +23,12 @@ class Ecg:
         :param brady_threshold: threshold for bradycardia in bpm
         :param tachy_threshold: threshold for tachycardia in bpm
         :param mins: Specified averaging time over data set in minutes
+        :type  csv_file: comma separated value file
+        :type update_time: float/int
+        :type brady_threshold: int
+        :type tachy_threshold : int
+        :returns: None
+        :rtype: None
         """
         if csv_file:
             data = pd.read_csv(csv_file, header=None)
@@ -71,8 +77,10 @@ class Ecg:
 
     def prep_data(self):
         """
-        Method that prepares data for get_max_peaks
-        :return: none
+        Method that prepares data for get_max_peaks. Divides input data into
+        groups based on update_time and ensures that they are symmetric
+
+        :returns: none
         """
 
         total_time = self.time_array[-1] - self.time_array[1]
@@ -91,11 +99,9 @@ class Ecg:
     def get_max_peak(self):
         """
            Method that will find local maximum of an array i.e peaks
+           from the each of the divided groups provided by prep_data
 
-              :return total_peaks: list of all peaks detected, arranged
-               into chunks based on update_time
-              :rtype: list
-
+            :returns: none
            """
         for i in range(len(self.divided_voltage_array)):
             dump = []
@@ -157,12 +163,10 @@ class Ecg:
 
     def get_inst_hr(self):
         """
-           Function that calculates inst heart rate every update_time seconds
-           by counting number of peaks within update_time
+           Method that calculates inst heart rate every update_time seconds
+           by counting number of peaks occurring within update_time
 
-           :return self.raw_bunches: divided the total_peaks into custom peaks
-           :rtype: nd array
-
+           :returns: none
            """
 
         num_of_peaks = []
@@ -175,16 +179,14 @@ class Ecg:
         self.raw_bunches = inst_heart_rate * 60
 
     def get_avghr(self):
-        """ returns avghr
+        """
 
             Method gets avghr over user-specified minutes window.
             Also gives clinical indication of tachy/bradycardia,
             based on threshold values
 
-            :return avg_hr: Avg hr in BPM
-            :return status: Brady or tachycardia
-            :rtype avg_hr: float
-            :rtype status: list
+            :returns: none
+
         """
 
         user_sec = self.mins * self.MIN_SEC
@@ -217,8 +219,9 @@ class Ecg:
 
     def get_output(self):
         """
-        :return the output information in txt
-        :rtype: txt
+        Method to save HR output information to a .txt file
+        
+        :returns: none
         """
 
         hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
