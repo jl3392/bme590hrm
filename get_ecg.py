@@ -66,8 +66,10 @@ class Ecg:
         self.divided_time_array = np.array([])
         self.total_peaks = []
         self.avg_hr = None
-        self.status = None
         self.raw_bunches = []  # This is a list
+        self.real_bunches = []
+        self.brady = []
+        self.tachy = []
 
     def prep_data(self):
         """
@@ -205,15 +207,16 @@ class Ecg:
         self.avg_hr = math.floor(sum(real_bunches)/len(real_bunches))
 
     # Calculating brady-/tachycardia
-        if self.brady_threshold < self.avg_hr < self.tachy_threshold:
-            self.status = [2, 'You have a normal average heart rate '
-                              'over a period of {} minutes'.format(self.mins)]
-        elif self.avg_hr >= self.tachy_threshold:
-            self.status = [1, 'You have tachycardia over the period of '
-                              '{} minutes'.format(self.mins)]  # Tachy
-        elif self.avg_hr <= self.brady_threshold:
-            self.status = [0, 'You have bradycardia over the period of '
-                              '{} minutes'.format(self.mins)]  # Brady
+        for i in range(len(real_bunches)):
+            if self.brady_threshold < real_bunches[i] < self.tachy_threshold:
+                self.tachy.append('False')
+                self.brady.append('False')
+            if real_bunches[i] >= self.tachy_threshold:
+                self.tachy.append('True')
+                self.brady.append('False')
+            elif real_bunches[i] <= self.brady_threshold:
+                self.tachy.append('False')
+                self.brady.append('True')
 
     def get_output(self):
         """
@@ -226,4 +229,5 @@ class Ecg:
                       .format(self.raw_bunches))
         hr_info.write("\nEstimated Average HR is {} beats per minute.\n"
                       .format(self.avg_hr))
-        hr_info.write("\n{}.\n".format(self.status[1]))
+        hr_info.write("\n Tachycardia array is {}.\n".format(self.tachy))
+        hr_info.write("\n Bradycardia array is {}.\n".format(self.brady))

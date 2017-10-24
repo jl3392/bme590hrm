@@ -36,7 +36,7 @@ class TestEcgWorkflow(unittest.TestCase):
         sample_avg_hr = 150
         self.assertEqual(self.data.avg_hr, sample_avg_hr)
 
-    def test_status(self):
-        sample_stat = 1
-        self.assertEqual(self.data.status[0], sample_stat)
-        self.assertIsInstance(self.data.status[1], str)
+    # def test_status(self):
+        # sample_stat = 1
+        # self.assertEqual(self.data.status[0], sample_stat)
+        # self.assertIsInstance(self.data.status[1], str)
