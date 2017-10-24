@@ -1,10 +1,15 @@
 from get_ecg import Ecg
 import glob
 
-data = Ecg(csv_file=None, update_time=5,
-           brady_threshold=60, tachy_threshold=100, mins=2)
 
 if __name__ == "__main__":
+    """
+    
+    Main script that calls all methods of Ecg in order to 
+    process data contained in an input csv file and output a .txt file
+    containing all estimated heart rate parameters 
+    
+    """
     # Importing csv data
     # Create the list of file
     list_of_files = glob.glob('test_data/*.csv')
