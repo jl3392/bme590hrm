@@ -13,7 +13,7 @@ class Ecg:
     MIN_SEC = 60
     MIN_DIST = 150
 
-    def __init__(self, csv_file=None, update_time=5,
+    def __init__(self, data, update_time=5,
                  brady_threshold=60, tachy_threshold=100, user_sec=20):
         """
         Constructor for ECG processing needs the input file(s) to work on and
@@ -31,22 +31,16 @@ class Ecg:
         :returns: None
         :rtype: None
         """
-        if csv_file:
-            data = pd.read_csv(csv_file, header=None)
-            data.columns = ['time', 'voltage']
+        if data:
+            data = pd.DataFrame.from_dict(data, dtype=None)
+
             voltage = pd.to_numeric(data.voltage, errors='coerce')
             time = pd.to_numeric(data.time, errors='coerce')
             voltage = voltage.fillna(method='pad')
             time = time.fillna(method='pad')
             voltage = voltage.as_matrix()
             time = time.as_matrix()
-            if csv_file.rfind('\\'):
-                last_s = csv_file.rfind('\\')
-                self.name = csv_file.rpartition(
-                    csv_file[last_s])[-1].rpartition(".")[0]
-            if not self.name:
-                self.name = csv_file.rpartition(
-                    csv_file[csv_file.rfind('/')])[-1].rpartition(".")[0]
+
             self.time_array = time
             self.voltage_array = voltage
             self.update_time = update_time
@@ -77,6 +71,7 @@ class Ecg:
         self.brady = []
         self.tachy = []
         self.real_bunches = []
+        self.ecg_summary ={}
         self.ecg_dict = {}
         self.total_time = None
         self.indices = []
@@ -244,6 +239,19 @@ class Ecg:
             elif self.raw_bunches[i] <= self.brady_threshold:
                 self.tachy.append('False')
                 self.brady.append('True')
+
+    def summary(self):
+        """
+        Return the values(time, inst_HR, tachycardia, bradycardia)
+        are in json format.
+        :return: None
+        """
+        self.ecg_summary = {
+            "time":self.time_array,
+            "instantaneous_heart_rate": self.raw_bunches,
+            "tachycardia_annotations": self.tachy,
+            "bradycardia_annotations": self.brady
+        }
 
     def as_dict(self):
         """
