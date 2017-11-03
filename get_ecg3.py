@@ -9,7 +9,6 @@ class Ecg:
     Creating this class to convert raw ECG data of all types into HR data
     and clinical indication of brady-/tachycardia.
     """
-    MIN_SEC = 60
     MIN_DIST = 150
 
     def __init__(self, data, update_time=5,
@@ -18,12 +17,12 @@ class Ecg:
         Constructor for ECG processing needs the input file(s) to work on and
         time for how often to update the instantaneous HR
 
-        :param csv_file: the input file containing ECG data
+        :param data: the input json dict containing ECG data
         :param update_time: instantaneous HR update time in seconds
         :param brady_threshold: threshold for bradycardia in bpm
         :param tachy_threshold: threshold for tachycardia in bpm
         :param user_sec: Specified averaging time over data set in seconds
-        :type  csv_file: comma separated value file
+        :type  data: dictionary
         :type user_sec: float/int
         :type brady_threshold: list
         :type tachy_threshold : list
@@ -70,7 +69,7 @@ class Ecg:
         self.brady = []
         self.tachy = []
         self.real_bunches = []
-        self.ecg_summary ={}
+        self.ecg_summary = {}
         self.ecg_dict = {}
         self.total_time = None
         self.indices = []
@@ -204,16 +203,11 @@ class Ecg:
 
     # User specified seconds is more than data set time
         if self.user_sec > self.total_time:
-            # self.real_bunches = np.array_split(self.raw_bunches, len(self.raw_bunches))
             self.avg_hr = np.mean(self.raw_bunches)
 
     # User specified seconds is <= data set time
         else:
-            # self.real_bunches = chunks(len(self.raw_bunches), self.groups)
-            # for i in range(0, len(self.raw_bunches), self.user_sec):
-                # self.real_bunches.append(self.raw_bunches[i:i + self.groups])
-            # for i in range(len(self.real_bunches)):
-                # self.avg_hr.append(np.mean(self.real_bunches[i], axis=0))
+            # Getting indices for closest values to iterations of avg window
             for i in range(self.data_min, self.rounded_max, self.user_sec):
                 self.indices.append(((np.abs(self.time_array-i)).argmin()))
             # When only one index is reported (avg window is large for data)
@@ -222,10 +216,19 @@ class Ecg:
                 self.real_bunches.append(self.raw_bunches[self.indices:-1])
             else:
                 for i in range(1, len(self.indices)):
-                    self.real_bunches.append(self.raw_bunches[self.indices[i-1]:self.indices[i]])
+                    self.real_bunches.append(
+                        self.raw_bunches[self.indices[i-1]:self.indices[i]])
+            # Averaging
             for i in range(len(self.real_bunches)):
                 self.avg_hr.append(np.mean(self.real_bunches[i], axis=0))
 
+    def get_bradtach(self):
+        """
+        This method takes data set (default set to inst_hr) and returns
+        whether or not patient has brady-/tachycardia for each value.
+
+        :return: None
+        """
     # Calculating brady-/tachycardia
         for i in range(len(self.raw_bunches)):
             if np.logical_and(self.raw_bunches[i] > self.brady_threshold,
@@ -246,7 +249,7 @@ class Ecg:
         :return: None
         """
         self.ecg_summary = {
-            "time":self.time_array,
+            "time": self.time_array,
             "instantaneous_heart_rate": self.raw_bunches,
             "tachycardia_annotations": self.tachy,
             "bradycardia_annotations": self.brady
@@ -265,18 +268,18 @@ class Ecg:
             "bradycardia_annotations": self.brady,
         }
 
-    def get_output(self):
-        """
-        Method to save HR output information to a .txt file
-        
-        :returns: none
-        """
-
-        hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
-        hr_info.write("Estimated Instantaneous HR is {} beats per minute.\n"
-                      .format(self.raw_bunches))
-        hr_info.write("\nEstimated Average HR is {} beats per minute with an averaging"
-                      " window of {} seconds.\n"
-                      .format(self.avg_hr, self.user_sec))
-        hr_info.write("\n Tachycardia array is {}.\n".format(self.tachy))
-        hr_info.write("\n Bradycardia array is {}.\n".format(self.brady))
+    # def get_output(self):
+    #     """
+    #     Method to save HR output information to a .txt file
+    #
+    #     :returns: none
+    #     """
+    #
+    #     hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
+    #     hr_info.write("Estimated Instantaneous HR is {} beats per minute.\n"
+    #                   .format(self.raw_bunches))
+    #     hr_info.write("\nEstimated Average HR is {} beats per minute with an averaging"
+    #                   " window of {} seconds.\n"
+    #                   .format(self.avg_hr, self.user_sec))
+    #     hr_info.write("\n Tachycardia array is {}.\n".format(self.tachy))
+    #     hr_info.write("\n Bradycardia array is {}.\n".format(self.brady))
