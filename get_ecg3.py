@@ -12,7 +12,7 @@ class Ecg:
     MIN_DIST = 150
 
     def __init__(self, data, update_time=5,
-                 brady_threshold=60, tachy_threshold=100, user_sec=20):
+                 brady_threshold=60, tachy_threshold=100, user_sec=20, status=1):
         """
         Constructor for ECG processing needs the input file(s) to work on and
         time for how often to update the instantaneous HR
@@ -22,6 +22,7 @@ class Ecg:
         :param brady_threshold: threshold for bradycardia in bpm
         :param tachy_threshold: threshold for tachycardia in bpm
         :param user_sec: Specified averaging time over data set in seconds
+        :param status: Status for brady/tachycardia
         :type  data: dictionary
         :type user_sec: float/int
         :type brady_threshold: list
@@ -59,6 +60,9 @@ class Ecg:
             self.user_sec = user_sec
             if isinstance(self.user_sec, float):
                 self.user_sec = int(self.user_sec)
+            self.status = status
+            if isinstance(self.status, float):
+                self.status = int(self.status)
             elif isinstance(self.user_sec, str):
                 raise ValueError('Averaging window must be a number in s')
         self.divided_voltage_array = np.array([])
@@ -226,21 +230,38 @@ class Ecg:
         """
         This method takes data set (default set to inst_hr) and returns
         whether or not patient has brady-/tachycardia for each value.
+        Set self.bradtach = 0 for the data set to be inst_hr and set to
+        1 for the data set to be avg_hr.
 
         :return: None
         """
     # Calculating brady-/tachycardia
-        for i in range(len(self.raw_bunches)):
-            if np.logical_and(self.raw_bunches[i] > self.brady_threshold,
-                              self.raw_bunches[i] < self.tachy_threshold):
-                self.tachy.append('False')
-                self.brady.append('False')
-            if self.raw_bunches[i] >= self.tachy_threshold:
-                self.tachy.append('True')
-                self.brady.append('False')
-            elif self.raw_bunches[i] <= self.brady_threshold:
-                self.tachy.append('False')
-                self.brady.append('True')
+        # inst_hr
+        if self.status == 0:
+            for i in range(len(self.raw_bunches)):
+                if np.logical_and(self.raw_bunches[i] > self.brady_threshold,
+                                  self.raw_bunches[i] < self.tachy_threshold):
+                    self.tachy.append('False')
+                    self.brady.append('False')
+                if self.raw_bunches[i] >= self.tachy_threshold:
+                    self.tachy.append('True')
+                    self.brady.append('False')
+                elif self.raw_bunches[i] <= self.brady_threshold:
+                    self.tachy.append('False')
+                    self.brady.append('True')
+        # avg_hr
+        elif self.status == 1:
+            for i in range(len(self.avg_hr)):
+                if np.logical_and(self.avg_hr[i] > self.brady_threshold,
+                                  self.avg_hr[i] < self.tachy_threshold):
+                    self.tachy.append('False')
+                    self.brady.append('False')
+                if self.avg_hr[i] >= self.tachy_threshold:
+                    self.tachy.append('True')
+                    self.brady.append('False')
+                elif self.avg_hr[i] <= self.brady_threshold:
+                    self.tachy.append('False')
+                    self.brady.append('True')
 
     def summary(self):
         """
