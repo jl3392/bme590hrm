@@ -262,7 +262,7 @@ class Ecg:
         """
         self.ecg_dict = {
             "averaging_period": self.user_sec,
-            "time_interval": self.time_array,
+            "time_interval": self.time_array.tolist(),
             "average_heart_rate": self.avg_hr,
             "tachycardia_annotations": self.tachy,
             "bradycardia_annotations": self.brady,
