@@ -249,7 +249,7 @@ class Ecg:
         :return: None
         """
         self.ecg_summary = {
-            "time": self.time_array,
+            "time": self.time_array.tolist(),
             "instantaneous_heart_rate": self.raw_bunches,
             "tachycardia_annotations": self.tachy,
             "bradycardia_annotations": self.brady
