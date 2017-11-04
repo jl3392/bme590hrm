@@ -2,7 +2,7 @@ import opencsv
 import numpy
 
 
-filename = "Data/ecg_data_short.csv"
+filename = "ecg_data_short.csv"
 
 
 def test_opencsv():
