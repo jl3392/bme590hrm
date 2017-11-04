@@ -271,7 +271,7 @@ class Ecg:
         """
         self.ecg_summary = {
             "time": self.time_array.tolist(),
-            "instantaneous_heart_rate": self.raw_bunches,
+            "instantaneous_heart_rate": self.raw_bunches.tolist(),
             "tachycardia_annotations": self.tachy,
             "bradycardia_annotations": self.brady
         }
