@@ -12,7 +12,8 @@ class Ecg:
     MIN_DIST = 150
 
     def __init__(self, data, update_time=5,
-                 brady_threshold=60, tachy_threshold=100, user_sec=20, status=1):
+                 brady_threshold=60, tachy_threshold=100,
+                 user_sec=20, status=1):
         """
         Constructor for ECG processing needs the input file(s) to work on and
         time for how often to update the instantaneous HR
@@ -288,19 +289,3 @@ class Ecg:
             "tachycardia_annotations": self.tachy,
             "bradycardia_annotations": self.brady,
         }
-
-    # def get_output(self):
-    #     """
-    #     Method to save HR output information to a .txt file
-    #
-    #     :returns: none
-    #     """
-    #
-    #     hr_info = open('{}_HR_Information.txt'.format(self.name), 'w')
-    #     hr_info.write("Estimated Instantaneous HR is {} beats per minute.\n"
-    #                   .format(self.raw_bunches))
-    #     hr_info.write("\nEstimated Average HR is {} beats per minute with an averaging"
-    #                   " window of {} seconds.\n"
-    #                   .format(self.avg_hr, self.user_sec))
-    #     hr_info.write("\n Tachycardia array is {}.\n".format(self.tachy))
-    #     hr_info.write("\n Bradycardia array is {}.\n".format(self.brady))

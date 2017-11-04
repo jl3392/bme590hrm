@@ -34,5 +34,3 @@ def test_inst_hr():
 
     hr = inst_hr(peaks, update_time=3)  # in bpm
     assert hr == [100]
-
-
